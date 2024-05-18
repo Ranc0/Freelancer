@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Seller_Account(models.Model):
     syriatel_cash = models.BooleanField(default=False)
     usdt = models.BooleanField(default=False)
@@ -9,7 +8,8 @@ class Seller_Account(models.Model):
     def serialize(self): 
         return {
             "payment_method": self.payment_method,
-            "id_pecture": self.id_pecture
+            "id_picture": self.id_picture,
+            "work_group" : self.profile.work_group,
         }
     
 class Profile(models.Model):
