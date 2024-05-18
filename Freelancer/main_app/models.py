@@ -2,16 +2,9 @@ from django.db import models
 
 # Create your models here.
 class Seller_Account(models.Model):
-    SYRIATEL_CASH = "Syriatel_cash"
-    AL_HARAM = "Al_haram"
-    USTD = "USTD"
-
-    PAYMENT_CHOICES = [
-        (SYRIATEL_CASH, "Syriatel_cash"),
-        (AL_HARAM, "Al_haram"),
-        (USTD , "USTD"),
-    ]
-    payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default=SYRIATEL_CASH)
+    syriatel_cash = models.BooleanField(default=False)
+    ustd = models.BooleanField(default=False)
+    al_haram = models.BooleanField(default=False)
     id_pecture = models.ImageField()
     def serialize(self): 
         return {
