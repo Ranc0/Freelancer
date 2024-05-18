@@ -14,6 +14,29 @@ def profile (request , id) :
 def seller_account (request , id):
     if request.method == 'GET':
         info = Seller_Account.objects.get(id=id)
-        return JsonResponse(info.serialize())
+        seller_profiles_query_set = Profile.objects.filter(seller_account = info.pk)
+        seller_profiles = []
+        for pro in seller_profiles_query_set:
+            seller_profiles.append({
+                "profile_seller_id": pro.profile_seller_id,
+                "language" : pro.language,
+                "work_group" : pro.work_group,
+                "bio" : pro.bio,
+                "provided_services": pro.provided_services,
+                "member_since" : pro.member_since,
+                "rate" : pro.rate,
+            })
+        #print(seller_profiles)
+        help = info.serialize()
+        help.update({ "profiles":seller_profiles })
+        #for key,value in help.items():
+            #print(key + ": " + str(value))
+        return JsonResponse(help)
+    
+def seller_profile (request , id , id1):
+    if request.method == 'GET':
+        info = Seller_Account.objects.get(id=id)
+        seller_profile = Profile.objects.filter(seller_account = info.pk).get(id = id1)
+        return JsonResponse(seller_profile.serialize())
 
    
