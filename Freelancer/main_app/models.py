@@ -3,9 +3,9 @@ from django.db import models
 # Create your models here.
 class Seller_Account(models.Model):
     syriatel_cash = models.BooleanField(default=False)
-    ustd = models.BooleanField(default=False)
+    usdt = models.BooleanField(default=False)
     al_haram = models.BooleanField(default=False)
-    id_pecture = models.ImageField()
+    id_picture = models.ImageField()
     def serialize(self): 
         return {
             "payment_method": self.payment_method,
@@ -26,6 +26,6 @@ class Profile(models.Model):
             "provided_services": self.provided_services,
             "member_since": self.member_since
         }
-    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE)
+    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE,related_name='profile')
     #collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     #promotions = models.ManyToManyField(Promotion)
