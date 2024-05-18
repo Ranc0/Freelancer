@@ -4,13 +4,15 @@ class Seller_Account(models.Model):
     syriatel_cash = models.BooleanField(default=False)
     usdt = models.BooleanField(default=False)
     al_haram = models.BooleanField(default=False)
-    id_picture = models.ImageField(null=True)
+    id_picture = models.CharField(max_length=255,null=True)
     def serialize(self): 
         return {
-            "payment_method": self.payment_method,
+            "syriatel_cash": self.syriatel_cash,
+            "usdt": self.usdt,
+            "al_haram": self.al_haram,
             "id_picture": self.id_picture,
-            "work_group" : self.profile.work_group,
-            "rate" : self.profile.rate
+            "work_group" : self.profile.first().work_group,
+            "rate" : self.profile.first().rate
         }
     
 class Profile(models.Model):
@@ -20,7 +22,7 @@ class Profile(models.Model):
     provided_services = models.IntegerField(default=0)
     member_since = models.DateTimeField(auto_now=True)
     rate = models.FloatField(default=0.0)
-    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE, default = 0,related_name='profile' )
+    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE, default = 1,related_name='profile' )
     def serialize(self):
         return {
             "language": self.language,
