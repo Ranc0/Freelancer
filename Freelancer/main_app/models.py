@@ -26,6 +26,6 @@ class Profile(models.Model):
             "provided_services": self.provided_services,
             "member_since": self.member_since
         }
-    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE,related_name='profile')
+    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE,related_name='profile' , default = 1)
     #collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     #promotions = models.ManyToManyField(Promotion)
