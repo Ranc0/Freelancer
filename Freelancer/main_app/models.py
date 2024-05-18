@@ -11,6 +11,7 @@ class Seller_Account(models.Model):
             "payment_method": self.payment_method,
             "id_pecture": self.id_pecture
         }
+    
 class Profile(models.Model):
     language = models.CharField(max_length=50)
     work_group = models.CharField(max_length=50)
@@ -25,5 +26,6 @@ class Profile(models.Model):
             "provided_services": self.provided_services,
             "member_since": self.member_since
         }
+    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE)
     #collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     #promotions = models.ManyToManyField(Promotion)
