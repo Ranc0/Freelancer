@@ -2,15 +2,18 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Profile
 from .models import Seller_Account
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 
 def index (request) :
     return render (request , 'index.html')
-
+@api_view(['GET'])
 def profile (request , id) :
      if request.method == "GET": 
         info = Profile.objects.get(id = id)
-        return JsonResponse(info.serialize())
-     
+        return Response(info.serialize())
+@api_view(['GET'])     
 def seller_account (request , id):
     if request.method == 'GET':
         info = Seller_Account.objects.get(id=id)
@@ -31,12 +34,12 @@ def seller_account (request , id):
         help.update({ "profiles":seller_profiles })
         #for key,value in help.items():
             #print(key + ": " + str(value))
-        return JsonResponse(help)
-    
+        return Response(help)
+@api_view(['GET'])    
 def seller_profile (request , id , id1):
     if request.method == 'GET':
         info = Seller_Account.objects.get(id=id)
         seller_profile = Profile.objects.filter(seller_account = info.pk).get(id = id1)
-        return JsonResponse(seller_profile.serialize())
+        return Response(seller_profile.serialize())
 
    
