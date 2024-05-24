@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Profile
 from .models import Seller_Account
+from .models import Customer_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -42,4 +43,8 @@ def seller_profile (request , id , id1):
         seller_profile = Profile.objects.filter(seller_account = info.pk).get(id = id1)
         return Response(seller_profile.serialize())
 
-   
+@api_view(['GET'])
+def customer_account(request,id):
+    if request.method == 'GET':
+        info = Customer_Account.objects.get(id=id)
+        return Response(info.serialize())
