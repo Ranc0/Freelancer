@@ -6,14 +6,30 @@ from .models import Customer_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-
-def index (request) :
-    return render (request , 'index.html')
 @api_view(['GET'])
-def profile (request , id) :
-     if request.method == "GET": 
-        info = Profile.objects.get(id = id)
-        return Response(info.serialize())
+def index (request) :
+    routes = [
+        {
+            "endpoint" : 'account/seller/id',
+            "method" : 'GET',
+            "description" : "returns info of the seller account with this id"
+        }
+        ,
+        {
+            "endpoint" : 'account/customer/id',
+            "method" : 'GET',
+            "description" : "returns info of the customer account with this id"
+        }
+        ,
+        {
+            "endpoint" : 'account/seller/account_id/profile/profile_id',
+            "method" : 'GET',
+            "description" : "returns the profile with (profile_id) of the seller account with (account_id)"
+
+        },
+            ]
+    return Response(routes)
+
 @api_view(['GET'])     
 def seller_account (request , id):
     if request.method == 'GET':
@@ -36,6 +52,8 @@ def seller_account (request , id):
         #for key,value in help.items():
             #print(key + ": " + str(value))
         return Response(help)
+    
+    
 @api_view(['GET'])    
 def seller_profile (request , id , id1):
     if request.method == 'GET':
