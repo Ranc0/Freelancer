@@ -6,14 +6,30 @@ from .models import Customer_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-
-def index (request) :
-    return render (request , 'index.html')
 @api_view(['GET'])
-def profile (request , id) :
-     if request.method == "GET": 
-        info = Profile.objects.get(id = id)
-        return Response(info.serialize())
+def index (request) :
+    routes = [
+        {
+            "endpoint" : 'account/seller/id',
+            "method" : 'GET',
+            "description" : "returns info of the seller account with this id"
+        }
+        ,
+        {
+            "endpoint" : 'account/customer/id',
+            "method" : 'GET',
+            "description" : "returns info of the customer account with this id"
+        }
+        ,
+        {
+            "endpoint" : 'account/seller/account_id/profile/profile_id',
+            "method" : 'GET',
+            "description" : "returns the profile with (profile_id) of the seller account with (account_id)"
+
+        },
+            ]
+    return Response(routes)
+
 @api_view(['GET'])     
 def seller_account (request , id):
     if request.method == 'GET':
@@ -36,6 +52,8 @@ def seller_account (request , id):
         #for key,value in help.items():
             #print(key + ": " + str(value))
         return Response(help)
+    
+    
 @api_view(['GET'])    
 def seller_profile (request , id , id1):
     if request.method == 'GET':
@@ -48,3 +66,37 @@ def customer_account(request,id):
     if request.method == 'GET':
         info = Customer_Account.objects.get(id=id)
         return Response(info.serialize())
+    
+@api_view(['GET','POST'])
+def homepage(request):
+    if request.method == 'GET':
+        info = Profile.objects.all().order_by('-rate')
+        profiles = []
+        for profile in info:
+            profiles.append({
+                "profile_seller_id": profile.profile_seller_id,
+                "language" : profile.language,
+                "work_group" : profile.work_group,
+                "bio" : profile.bio,
+                "provided_services": profile.provided_services,
+                "member_since" : profile.member_since,
+                "rate" : profile.rate,
+            })
+        dectionary = {'profiles': profiles}
+        return Response(dectionary)
+    elif request.method == 'POST':
+        groups = request.data
+        info = Profile.objects.filter(work_group__in = groups['work_groups']).order_by('-rate')
+        profiles = []
+        for profile in info:
+            profiles.append({
+                "profile_seller_id": profile.profile_seller_id,
+                "language" : profile.language,
+                "work_group" : profile.work_group,
+                "bio" : profile.bio,
+                "provided_services": profile.provided_services,
+                "member_since" : profile.member_since,
+                "rate" : profile.rate,
+            })
+        dectionary = {'profiles': profiles}
+        return Response(dectionary)
