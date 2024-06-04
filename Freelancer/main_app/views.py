@@ -85,8 +85,15 @@ def homepage(request):
         dectionary = {'profiles': profiles}
         return Response(dectionary)
     elif request.method == 'POST':
-        groups = request.data
-        info = Profile.objects.filter(work_group__in = groups['work_groups']).order_by('-rate')
+        data = request.data
+        info = Profile.objects.all().order_by('-rate')
+        for i,j in data.items():
+            if i == "work_group":
+                info = info.filter(work_group__in = j)
+            elif i == "provided_services":
+                info = info.filter(provided_services__gte = j)
+            elif i == "rate":
+                info = info.filter(rate__gte = j)
         profiles = []
         for profile in info:
             profiles.append({
