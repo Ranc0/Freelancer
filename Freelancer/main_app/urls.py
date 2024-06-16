@@ -1,11 +1,15 @@
 from django.urls import path 
-from . import views
+from .views import customer_account
+from .views import homepage
+from .views import index
+from .views import seller_account
+from .views import seller_profile
 
 urlpatterns = [
-    path('',views.index, name='index'),
-    path('account/seller/<int:id>' , views.seller_account , name='seller_account'),
-    path('account/seller/<int:id>/profile/<int:id1>' , views.seller_profile , name='seller_profile'),
-    path('account/customer/<int:id>', views.customer_account),
-    path('homepage', views.homepage)
+    path('',index, name='index'),
+    path('account/seller/<int:id>' , seller_account , name='seller_account'),
+    path('account/seller/<int:id>/profile/<int:id1>' ,seller_profile , name='seller_profile'),
+    path('account/customer/<int:id>', customer_account),
+    path('homepage', homepage)
 
 ]
