@@ -7,6 +7,8 @@ from .views import seller_profile
 from .views import search
 from .views import seller_signup
 from .views import seller_update_account
+from .views import seller_signin
+from .views import seller_update_profile
 
 urlpatterns = [
     path('',index, name='index'),
@@ -17,5 +19,7 @@ urlpatterns = [
     path('signup/seller', seller_signup),
     path('search', search),
     path('update/seller/<int:id>', seller_update_account),
+    path('signin/seller', seller_signin),
+    path('update/seller/account/<int:id1>/profile/<int:id2>', seller_update_profile)
 
 ]
