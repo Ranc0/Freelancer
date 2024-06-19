@@ -11,11 +11,11 @@ from .views import seller_update_account
 urlpatterns = [
     path('',index, name='index'),
     path('account/seller/<int:id>' , seller_account , name='seller_account'),
-    path('account/seller/<int:id>/profile/<int:id1>' ,seller_profile , name='seller_profile'),
+    path('account/seller/<int:id1>/profile/<int:id2>' ,seller_profile , name='seller_profile'),
     path('account/customer/<int:id>', customer_account),
     path('homepage', homepage),
     path('signup/seller', seller_signup),
     path('search', search),
-     path('update/seller/<int:id>', seller_update_account),
+    path('update/seller/<int:id>', seller_update_account),
 
 ]

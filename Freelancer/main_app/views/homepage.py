@@ -13,7 +13,8 @@ def homepage(request):
         profiles = []
         for profile in info:
             profiles.append({
-                "profile_seller_id": profile.profile_seller_id,
+                "profile_id": profile.profile_seller_id,
+                "account_id": profile.seller_account.pk,
                 "language" : profile.language,
                 "work_group" : profile.work_group,
                 "bio" : profile.bio,
