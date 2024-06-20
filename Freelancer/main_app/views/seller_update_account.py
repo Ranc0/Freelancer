@@ -24,6 +24,8 @@ def seller_update_account (request , id) :
     info = account.serialize()
     for i,j in data.items() :
         info[i] = j
+        setattr(account , i , j)
+    account.save()
 
     info.update({"error" : "no error found"})
     return Response (info)
