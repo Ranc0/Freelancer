@@ -20,6 +20,6 @@ urlpatterns = [
     path('search', search),
     path('update/seller/<int:id>', seller_update_account),
     path('signin/seller', seller_signin),
-    path('update/seller/account/<int:id1>/profile/<int:id2>', seller_update_profile)
+    path('update/seller/<int:id1>/profile/<int:id2>', seller_update_profile)
 
 ]
