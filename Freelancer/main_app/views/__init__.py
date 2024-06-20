@@ -10,3 +10,6 @@ from .seller_signin import *
 from .seller_update_profile import *
 from .seller_create_profile import *
 from .seller_delete_profile import *
+from .customer_signup import *
+from .customer_signin import *
+from .customer_update_account import *
