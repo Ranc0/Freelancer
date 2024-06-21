@@ -3,15 +3,18 @@ from django.http import JsonResponse
 from ..models import Profile
 from ..models import Seller_Account
 from ..models import Customer_Account
+from .. import validators as v
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 @api_view(['POST'])
 def seller_signup (request) : 
     data = request.data
-    if (len(data["email"])>0 and len(data["first_name"])>0 and
-    len(data["second_name"])>0 and len(data["phone_number"])>0 and
-    len(data['password']) >0 ):
+    if (Seller_Account.objects.filter(email=data['email']).count()>0 ):
+        return Response({"error" : "email is used before"})
+    
+    if (v.emailChecker(data['email'])== 1 and v.passwordChecker(data['password'])== 1
+        and v.phoneNumberChecke(data['phone_number'])==1 ):
         seller_account = Seller_Account.objects.create (
                     first_name= data['first_name'],
                     second_name= data['second_name'],
@@ -30,5 +33,5 @@ def seller_signup (request) :
         now.update({'error': "no error found"})
         return Response (now)
     else:
-        return Response ({"error" : "some values are empty"})
+        return Response ({"error" : "some important values are not valid"})
         

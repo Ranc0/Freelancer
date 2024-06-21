@@ -14,6 +14,8 @@ def seller_update_profile (request, id1, id2) :
 
     info = profile.serialize()
     for i,j in data.items() :
+        if (i=="id") :
+            return Response ({"error" : "you can't change profile id , changes not saved"})
         info[i] = j
         setattr(profile , i , j)
     profile.save()

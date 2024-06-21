@@ -14,6 +14,7 @@ class Seller_Account(models.Model):
     id_picture = models.CharField(max_length=255,null=True)
     def serialize(self): 
         return {
+            "id" : self.id,
             "first_name": self.first_name,
             "second_name": self.second_name,
             "country": self.country,
@@ -58,6 +59,7 @@ class Customer_Account(models.Model):
     member_since = models.DateField(auto_now_add=True)
     def serialize(self): 
         return {
+            "id" : self.id,
             "first_name": self.first_name,
             "second_name": self.second_name,
             "country": self.country,
@@ -78,6 +80,7 @@ class Deal_With(models.Model):
     comment = models.TextField(null=True)
     def serialize(self): 
         return {
+            "id" : self.id,
             "seller_account": self.seller_account,
             "seller_profile": self.seller_profile,
             "customer_account": self.customer_account,

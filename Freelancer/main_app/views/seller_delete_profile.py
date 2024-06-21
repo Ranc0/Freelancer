@@ -9,8 +9,12 @@ from datetime import date
 
 @api_view(['DELETE'])
 def seller_delete_profile (request,id1,id2): 
-    profile = Profile.objects.filter(profile_seller_id = id2).get(seller_account = id1)
-    now = profile.serialize()
-    profile.delete()
-    now.update({'error': "no error found, deletion done"})
-    return Response (now)
+    profile = Profile.objects.filter(profile_seller_id = id2).filter(seller_account = id1)
+    if profile:
+        profile = profile[0]
+        now = profile.serialize()
+        profile.delete()
+        now.update({'error': "no error found"})
+        return Response (now)
+    else :
+        return Response ({'error': "no profile found to delete"})
