@@ -5,11 +5,19 @@ from ..models import Seller_Account
 from ..models import Customer_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth.models import User, auth
+
 @api_view(['POST'])
 def customer_signin (request) :
     data = request.data
-    if len(data["email"])>0 and len(data['password'])>0:
-        customer_account = Customer_Account.objects.filter(email = data['email']).get(password = data['password'])
-        return Response (customer_account.serialize())
+    if len(data['password']) == 0 or (len(data['username']) == 0 and len(data['email']) == 0) :
+        return Response({ "error" : "some important values are not valid" })
+
+    if User.objects.filter(username = data['username']).exists():
+        user = User.objects.get(username = data['username'])
+        customer_account = Customer_Account.objects.get(username = user)
+        now = customer_account.serialize()
+        now.update({ "id" : customer_account.username_id })
+        return Response (now)
     else:
-        return Response ({"error" : "some values are empty"}) 
+        return Response ({"error" : "user must sign up first"}) 

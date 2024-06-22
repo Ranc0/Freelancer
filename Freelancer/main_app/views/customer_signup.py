@@ -7,30 +7,44 @@ from .. import validators as v
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from datetime import date
+from django.contrib.auth.models import User, auth
 
 @api_view(['POST'])
 def customer_signup (request) : 
     data = request.data
-    if (Customer_Account.objects.filter(email=data['email']).count()>0 ):
-        return Response({"error" : "email is used before"})
-    
-    if (v.emailChecker(data['email'])== 1 and v.passwordChecker(data['password'])== 1
-        and v.phoneNumberChecke(data['phone_number'])==1 ):
-        customer_account = Customer_Account.objects.create (
+    username = data['username']
+    email = data['email']
+    password = data['password']
+    password2 = data['password2']
+    if (password==password2):
+        if (User.objects.filter(email=email).exists()):
+            now = {'error': "email is already used"}
+            return Response (now)
+        elif User.objects.filter(username=username).exists():
+            now = {'error': "username already used"}
+            return Response (now)
+        else:
+            if(v.emailChecker(data['email'])== 1 and v.passwordChecker(data['password'])== 1 and v.phoneNumberChecker(data['phone_number'])==1 ):
+                    user = User.objects.create_user(username = username , email = email , password = password)
+                    customer_account = Customer_Account.objects.create (
+                    username = user,
                     first_name= data['first_name'],
                     second_name= data['second_name'],
-                    password = data['password'],
                     country= data['country'],
                     bdate= data['bdate'],
                     email= data['email'],
                     phone_number= data['phone_number'],
                     member_since = date.today(),
-            )
-        now = customer_account.serialize()
-        now.update({'id': customer_account.id})
-        now.update({'error': "no error found"})
+                )
+                    now = customer_account.serialize()
+                    now.update({'id': user.id})
+                    now.update({'error': "no error found"})
+                    user.save()
+                    return Response (now)
+            else :
+                return Response ({"error" : "some important values are not valid"})
+    else:
+        now = {'error': "passwords are not the same"}
         return Response (now)
-    else :
-        return Response ({"error" : "some important values are not valid"})
     
         

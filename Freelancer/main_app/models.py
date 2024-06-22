@@ -1,11 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import User, auth
 
 class Seller_Account(models.Model):
+    username = models.ForeignKey(User , null = True , on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
     second_name = models.CharField(max_length=50,null=True)
     country = models.CharField(max_length=50)
     bdate = models.DateField()
-    password = models.CharField(max_length=8)
+    #password = models.CharField(max_length=8)
     email = models.EmailField()
     phone_number = models.CharField(max_length=10)
     syriatel_cash = models.BooleanField(default=False)
@@ -14,7 +16,7 @@ class Seller_Account(models.Model):
     id_picture = models.CharField(max_length=255,null=True)
     def serialize(self): 
         return {
-            "id" : self.id,
+            #"id" : self.id,
             "first_name": self.first_name,
             "second_name": self.second_name,
             "country": self.country,
@@ -49,17 +51,18 @@ class Profile(models.Model):
     #promotions = models.ManyToManyField(Promotion)
 
 class Customer_Account(models.Model):
+    username = models.ForeignKey(User , null = True , on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
     second_name = models.CharField(max_length=50,null=True)
     country = models.CharField(max_length=50)
     bdate = models.DateField()
-    password = models.CharField(max_length=8)
+    #password = models.CharField(max_length=8)
     email = models.EmailField()
     phone_number = models.CharField(max_length=10)
     member_since = models.DateField(auto_now_add=True)
     def serialize(self): 
         return {
-            "id" : self.id,
+            #"id" : self.id,
             "first_name": self.first_name,
             "second_name": self.second_name,
             "country": self.country,
