@@ -9,8 +9,10 @@ from rest_framework.response import Response
 @api_view(['PUT'])
 def seller_update_profile (request, id1, id2) : 
     data = request.data
-    account = Seller_Account.objects.get(id = id1)
-    profile = Profile.objects.filter(profile_seller_id = id2).get(seller_account = id1)
+    if not Seller_Account.objects.filter(username = id1).exists():
+        return Response({ "error" : "no seller with this id" })
+    seller_account = Seller_Account.objects.get(username=id1)  
+    profile = Profile.objects.filter(profile_seller_id = id2).get(seller_account = seller_account.pk)
 
     info = profile.serialize()
     for i,j in data.items() :
