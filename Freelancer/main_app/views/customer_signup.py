@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from datetime import date
 from django.contrib.auth.models import User, auth
+from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST'])
 def customer_signup (request) : 
@@ -40,6 +41,9 @@ def customer_signup (request) :
                     now.update({'id': user.id})
                     now.update({'error': "no error found"})
                     user.save()
+                    refresh = RefreshToken.for_user(user)
+                    now.update({'refresh': str(refresh)})
+                    now.update({'access': str(refresh.access_token)})
                     return Response (now)
             else :
                 return Response ({"error" : "some important values are not valid"})

@@ -3,11 +3,13 @@ from django.http import JsonResponse
 from ..models import Profile
 from ..models import Seller_Account
 from ..models import Customer_Account
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view , permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from datetime import date
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def seller_create_profile (request,id): 
     data = request.data
     if Seller_Account.objects.filter(username = id).exists():

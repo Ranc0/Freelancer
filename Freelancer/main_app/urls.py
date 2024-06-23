@@ -14,6 +14,10 @@ from .views import seller_delete_profile
 from .views import customer_signup
 from .views import customer_signin
 from .views import customer_update_account
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('',index, name='index'),
@@ -30,6 +34,7 @@ urlpatterns = [
     path('delete/seller/<int:id1>/profile/<int:id2>', seller_delete_profile),
     path('signup/customer', customer_signup),
     path('signin/customer', customer_signin),
-    path('update/customer/<int:id>', customer_update_account)
+    path('update/customer/<int:id>', customer_update_account),
+     path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
 
 ]

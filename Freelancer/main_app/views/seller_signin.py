@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.hashers import check_password
+from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST'])
 def seller_signin (request) :
@@ -22,6 +23,10 @@ def seller_signin (request) :
         seller_account = Seller_Account.objects.get(username = user)
         now = seller_account.serialize()
         now.update({ "id" : seller_account.username_id })
+        now.update({ "error" : 'no error found'})
+        refresh = RefreshToken.for_user(user)
+        now.update({'refresh': str(refresh)})
+        now.update({'access': str(refresh.access_token)})
         return Response(now)
     else:
         return Response ({"error" : "user must sign up first"}) 

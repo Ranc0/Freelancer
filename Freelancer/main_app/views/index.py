@@ -42,7 +42,7 @@ def index (request) :
          {
             "endpoint" : "signup/seller",
             "method" : 'post',
-            "description" : "you send a json file with all info of the new seller account , you recieve a json file with the attributes you sent , an ((id)) attribute which is the id of the account you made and an ((error)) attribute which is value is 'no error found' if everything was fine"
+            "description" : "you send a json file with all info of the new seller account , you recieve a json file with the attributes you sent , an ((id)) attribute which is the id of the account you made and an ((error)) attribute which is value is 'no error found' if everything was fine and a ((refresh))-((access)) token"
 
         },
          {
@@ -54,22 +54,22 @@ def index (request) :
         {
             "endpoint" : "update/seller/account_id/profile/profile_id",
             "method" : 'put',
-            "description" : "you send a json file with all info of the seller account's proifle that you want to update , you recieve a json file with new data"
+            "description" : "you send a json file with all info of the seller account's proifle that you want to update , you recieve a json file with new data , the json file should include your ((access)) token to make sure you're legit user"
         },
         {
             "endpoint" : "signin/seller",
             "method" : 'post',
-            "description" : "you send a json file with email and password of the seller account, if correct you reciece this account info with ((error))=='no error found' "
+            "description" : "you send a json file with email and password of the seller account, if correct you reciece this account info with ((error))=='no error found' and a ((refresh))-((access)) token "
         },
         {
             "endpoint" : "delete/seller/account_id/profile/profile_id",
             "method" : 'delete',
-            "description" : "you just request the url and the profile is deleted "
+            "description" : "you send json file with ((access)) token  , if delete you revice ((error)) = 'no error found"
         },
         {
             "endpoint" : "create/seller/account_id/profile",
             "method" : 'post',
-            "description" : "you send a json file with all info of the profile you want to make for this account , you receive the info back and the profile id "
+            "description" : "you send a json file with all info of the profile you want to make for this account and your ((access)) token , you receive the info back and the profile id "
         },
          {
             "endpoint" : "update/customer/account_id",
@@ -79,13 +79,19 @@ def index (request) :
         {
             "endpoint" : "signup/customer",
             "method" : 'post',
-            "description" : "you send a json file with all info of the new customer account , you recieve a json file with the attributes you sent , an ((id)) attribute which is the id of the account you made and an ((error)) attribute which is value is 'no error found' if everything was fine"
+            "description" : "you send a json file with all info of the new customer account , you recieve a json file with the attributes you sent , an ((id)) attribute which is the id of the account you made and an ((error)) attribute which is value is 'no error found' if everything was fine and a ((refresh))-((access)) token"
         }
         ,
         {
             "endpoint" : "signin/customer",
             "method" : 'post',
-            "description" : "you send a json file with email and password of the customer account, if correct you reciece this account info with ((error))=='no error found' "
+            "description" : "you send a json file with email and password of the customer account, if correct you reciece this account info with ((error))=='no error found' and a ((refresh))-((access)) token "
+        },
+        {
+            "endpoint" : "token/refresh",
+            "method" : 'post',
+            "description" : "you send a json file with your ((refresh)) token every 30 minutes  , you recive a new ((access)) token each time"
         }
+
             ]
     return Response(routes)
