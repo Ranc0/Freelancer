@@ -13,3 +13,4 @@ from .seller_delete_profile import *
 from .customer_signup import *
 from .customer_signin import *
 from .customer_update_account import *
+from .models_documentation import *
