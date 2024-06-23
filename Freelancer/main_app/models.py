@@ -1,11 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import User, auth
 
 class Seller_Account(models.Model):
+    username = models.ForeignKey(User , null = True , on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
     second_name = models.CharField(max_length=50,null=True)
     country = models.CharField(max_length=50)
     bdate = models.DateField()
-    password = models.CharField(max_length=8)
+    #password = models.CharField(max_length=8)
     email = models.EmailField()
     phone_number = models.CharField(max_length=10)
     syriatel_cash = models.BooleanField(default=False)
@@ -14,11 +16,11 @@ class Seller_Account(models.Model):
     id_picture = models.CharField(max_length=255,null=True)
     def serialize(self): 
         return {
+            #"id" : self.id,
             "first_name": self.first_name,
             "second_name": self.second_name,
             "country": self.country,
             "bdate": self.bdate,
-            "password": self.password,
             "email": self.email,
             "phone_number": self.phone_number,
             "syriatel_cash": self.syriatel_cash,
@@ -47,3 +49,47 @@ class Profile(models.Model):
     
     #collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     #promotions = models.ManyToManyField(Promotion)
+
+class Customer_Account(models.Model):
+    username = models.ForeignKey(User , null = True , on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50)
+    second_name = models.CharField(max_length=50,null=True)
+    country = models.CharField(max_length=50)
+    bdate = models.DateField()
+    #password = models.CharField(max_length=8)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=10)
+    member_since = models.DateField(auto_now_add=True)
+    def serialize(self): 
+        return {
+            #"id" : self.id,
+            "first_name": self.first_name,
+            "second_name": self.second_name,
+            "country": self.country,
+            "bdate": self.bdate,
+            "email": self.email,
+            "phone_number": self.phone_number,
+            "member_since": self.member_since,
+        }
+    
+class Deal_With(models.Model):
+    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE, default = 1,related_name='deal_with_customer')
+    seller_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, default = 1,related_name='deal_with_customer')
+    customer_account = models.ForeignKey(Customer_Account, on_delete=models.CASCADE, default = 1,related_name='deal_with_seller')
+    created_at = models.DateField(auto_now_add=True)
+    start_service = models.IntegerField(default=0)
+    end_service = models.IntegerField(default=0)
+    rating = models.IntegerField(default=0)
+    comment = models.TextField(null=True)
+    def serialize(self): 
+        return {
+            "id" : self.id,
+            "seller_account": self.seller_account,
+            "seller_profile": self.seller_profile,
+            "customer_account": self.customer_account,
+            "start_service": self.start_service,
+            "end_service": self.end_service,
+            "rating": self.rating,
+            "comment": self.comment,
+        }
+    
