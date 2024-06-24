@@ -99,6 +99,7 @@ class Message (models.Model):
     sender = models.CharField(max_length=50)
     reciever = models.CharField(max_length=50)
     date = models.DateTimeField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
 
     def serialize(self): 
         return {
@@ -106,6 +107,7 @@ class Message (models.Model):
             "sender" : self.sender,
             "reciever" : self.reciever,
             "date" : self.date,
+            "time": self.time
         }
 
 
