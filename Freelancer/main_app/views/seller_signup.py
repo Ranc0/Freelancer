@@ -16,23 +16,13 @@ def seller_signup (request) :
     arr = ['username','email','password','password2','first_name','second_name',
     'country','bdate','phone_number','syriatel_cash','usdt','al_haram','id_picture']
     dic = {}
-    dic['username'] = 0
-    dic['email'] = 0
-    dic['password'] = 0
-    dic['password2'] = 0
-    dic['first_name'] = 0
-    dic['second_name'] = 0
-    dic['country'] = 0
-    dic['bdate'] = 0
-    dic['phone_number'] = 0
-    dic['syriatel_cash'] = 0
-    dic['usdt'] = 0
-    dic['al_haram'] = 0
-    dic['id_picture'] = 0
+    for i in arr:
+        dic[i] = 0
 
     for i,j in data.items():
         if i in arr:
             dic[i] += 1
+    
 
 
     for i,j in dic.items():

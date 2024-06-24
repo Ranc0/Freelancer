@@ -18,15 +18,9 @@ def customer_signup (request) :
 
     cnt = 0
     dic = {}
-    dic['username'] = 0
-    dic['email'] = 0
-    dic['password'] = 0
-    dic['password2'] = 0
-    dic['first_name'] = 0
-    dic['second_name'] = 0
-    dic['country'] = 0
-    dic['bdate'] = 0
-    dic['phone_number'] = 0
+    for i in arr:
+        dic[i] = 0
+        
     for i, j in data.items():
         if i in arr:    
             dic[i] += 1
