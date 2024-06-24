@@ -12,6 +12,25 @@ from rest_framework_simplejwt.tokens import RefreshToken
 @api_view(['POST'])
 def seller_signup (request) : 
     data = request.data
+    cnt = 0
+    arr = ['username','email','password','password2','first_name','second_name',
+    'country','bdate','phone_number','syriatel_cash','usdt','al_haram','id_picture']
+    dic = {}
+    for i in arr:
+        dic[i] = 0
+
+    for i,j in data.items():
+        if i in arr:
+            dic[i] += 1
+    
+
+
+    for i,j in dic.items():
+        if j > 1:
+            return Response({ "error" : "some values are duplicate" })
+        cnt += j
+    if cnt != 13:
+        return Response({ "error" : "some values are empty" })
     username = data['username']
     email = data['email']
     password = data['password']

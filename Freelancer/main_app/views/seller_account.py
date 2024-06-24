@@ -15,7 +15,7 @@ def seller_account (request , id):
             seller_profiles = []
             for pro in seller_profiles_query_set:
                 seller_profiles.append({
-                    "profile_id": pro.id,
+                    "profile_id": pro.profile_seller_id,
                     "language" : pro.language,
                     "work_group" : pro.work_group,
                     "bio" : pro.bio,

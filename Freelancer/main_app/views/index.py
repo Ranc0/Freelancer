@@ -54,7 +54,7 @@ def index (request) :
         {
             "endpoint" : "update/seller/account_id/profile/profile_id",
             "method" : 'put',
-            "description" : "you send a json file with all info of the seller account's proifle that you want to update , you recieve a json file with new data , the json file should include your ((access)) token to make sure you're legit user"
+            "description" : "you send a json file with all info of the seller account's proifle that you want to update , you recieve a json file with new data ,  ((access)) token should be included in the request header"
         },
         {
             "endpoint" : "signin/seller",
@@ -64,12 +64,12 @@ def index (request) :
         {
             "endpoint" : "delete/seller/account_id/profile/profile_id",
             "method" : 'delete',
-            "description" : "you send json file with ((access)) token  , if delete you revice ((error)) = 'no error found"
+            "description" : "you send the ((access)) token in request header  , if deleted you revice ((error)) = 'no error found"
         },
         {
             "endpoint" : "create/seller/account_id/profile",
             "method" : 'post',
-            "description" : "you send a json file with all info of the profile you want to make for this account and your ((access)) token , you receive the info back and the profile id "
+            "description" : "you send a json file with all info of the profile you want to make for this account , you receive the info back and the profile id , ((access)) token should be included in the request header "
         },
          {
             "endpoint" : "update/customer/account_id",
