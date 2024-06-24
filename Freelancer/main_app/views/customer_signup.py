@@ -13,6 +13,20 @@ from rest_framework_simplejwt.tokens import RefreshToken
 @api_view(['POST'])
 def customer_signup (request) : 
     data = request.data
+    b1 = b2 = b3 = b4 = b5 = b6 = b7 = b8 = b9 = 0
+    for i, j in data.items():
+        if i == 'username': b1 = 1
+        elif i == 'email' : b2 = 1
+        elif i == 'password' : b3 = 1
+        elif i == 'password2' : b4 = 1
+        elif i == 'first_name' : b5 = 1
+        elif i == 'second_name' : b6 = 1
+        elif i == 'country' : b7 = 1
+        elif i == 'bdate' : b8 = 1
+        elif i == 'phone_number' : b9 = 1
+                  
+    if not b1 or not b2 or not b3 or not b4 or not b5 or not b6 or not b7 or not b8 or not b9 :
+        return Response({ "error" : "some values are empty" })
     username = data['username']
     email = data['email']
     password = data['password']
