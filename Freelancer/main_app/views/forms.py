@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 @api_view(['GET'])
-def models_documentation(request):
+def forms(request):
     routes = [
         { 
             "name": "Seller account",
@@ -33,9 +33,6 @@ def models_documentation(request):
                 "language: Arabic",
                 "work_group: IT",
                 "bio: Mobile Application Developper (IOS and Android)",
-                "provided_services: 12",
-                "member_since: 2020-12-12",
-                "rate = 3.1"
             ]
         },
         {
@@ -48,7 +45,6 @@ def models_documentation(request):
                 "bdate: 2002-8-15",
                 "email: Rani@gmail.com",
                 "phone_number: 0988888888",
-                "member_since: 2017-1-17"
             ]
         }
     ]
