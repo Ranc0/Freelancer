@@ -14,3 +14,4 @@ from .customer_signup import *
 from .customer_signin import *
 from .customer_update_account import *
 from .forms import *
+from .send_message import *

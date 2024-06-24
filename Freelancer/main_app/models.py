@@ -93,3 +93,20 @@ class Deal_With(models.Model):
             "comment": self.comment,
         }
     
+class Message (models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)
+    message = models.TextField()
+    sender = models.CharField(max_length=50)
+    reciever = models.CharField(max_length=50)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def serialize(self): 
+        return {
+            "message": self.message,
+            "sender" : self.sender,
+            "reciever" : self.reciever,
+            "date" : self.date,
+        }
+
+
+    
