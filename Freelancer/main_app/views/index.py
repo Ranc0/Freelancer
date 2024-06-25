@@ -92,6 +92,17 @@ def index (request) :
             "method" : 'post',
             "description" : "you send a json file with your ((refresh)) token every 30 minutes  , you recive a new ((access)) token each time"
         }
+        ,
+         {
+            "endpoint" : "chat/send/target_id",
+            "method" : 'post',
+            "description" : "you send a json file with the ((message))  ,  ((access)) token should be included in the request header "
+        },
+        {
+            "endpoint" : "chat/target_id",
+            "method" : 'get',
+            "description" : "you get your chat with this target_id  ,  ((access)) token should be included in the request header "
+        }
 
             ]
     return Response(routes)

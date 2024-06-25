@@ -14,7 +14,8 @@ def seller_signin (request) :
     data = request.data
     if len(data['password']) == 0 or (len(data['username']) == 0 and len(data['email']) == 0) :
         return Response({ "error" : "some important values are not valid" })
-    
+    if (not User.objects.filter(username = data['username']).exists()):
+          return Response ({"error" : "no such user"})
     user = User.objects.get(username = data['username'])
     if check_password('the default password', user.password):
         return Response ({"error" : "incorrect password"})

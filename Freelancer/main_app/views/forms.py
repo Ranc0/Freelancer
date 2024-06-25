@@ -46,6 +46,12 @@ def forms(request):
                 "email: Rani@gmail.com",
                 "phone_number: 0988888888",
             ]
+        },
+
+        {
+            "How to send your access token in the request header?" :  "like this :",
+            
+            "Authorization"  :  "Bearer ((accesstoken))" 
         }
     ]
     return Response(routes)
