@@ -93,21 +93,30 @@ class Deal_With(models.Model):
             "comment": self.comment,
         }
     
+class Chat(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)   
+    person2_id = models.CharField(max_length=50 , null=True)
+    unread_cnt = models.IntegerField(default=0)
+    def serialize(self):
+        return {
+            "id" : self.person2_id,
+            "unread_cnt" : self.unread_cnt
+        }
 class Message (models.Model):
-    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE , null = True)
     message = models.TextField()
-    sender = models.CharField(max_length=50)
-    reciever = models.CharField(max_length=50)
+    sender = models.CharField(max_length=50 , null=True)
+    reciever = models.CharField(max_length=50 , null = True) 
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
 
     def serialize(self): 
         return {
             "message": self.message,
+            "date" : self.date,
+            "time": self.time,
             "sender" : self.sender,
             "reciever" : self.reciever,
-            "date" : self.date,
-            "time": self.time
         }
 
 

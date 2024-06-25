@@ -16,3 +16,4 @@ from .customer_update_account import *
 from .forms import *
 from .send_message import *
 from .get_chat import *
+from .explore_chats import *
