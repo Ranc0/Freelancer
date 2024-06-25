@@ -16,6 +16,7 @@ from .views import customer_signin
 from .views import customer_update_account
 from .views import forms
 from .views import send_message
+from .views import get_chat
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -40,5 +41,6 @@ urlpatterns = [
     path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('forms', forms),
     path('chat/send/<int:id>', send_message),
+    path('chat/<int:id>', get_chat),
 
 ]

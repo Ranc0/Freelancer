@@ -98,7 +98,7 @@ class Message (models.Model):
     message = models.TextField()
     sender = models.CharField(max_length=50)
     reciever = models.CharField(max_length=50)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
 
     def serialize(self): 

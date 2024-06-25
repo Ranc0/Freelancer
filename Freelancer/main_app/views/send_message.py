@@ -30,5 +30,5 @@ def send_message(request , id):
     )
     message.save()
     message2.save()
-    return Response({"error": "added successfully"})
+    return Response({"error": "no error found"})
     
