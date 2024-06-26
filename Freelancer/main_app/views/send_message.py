@@ -15,6 +15,7 @@ def send_message(request , id):
     user2 = User.objects.filter(id = id)
     if (not user2):
          return Response({"error": "no user with this id"})
+    
     user2 = user2[0]
     message = Message.objects.create(
         user = user1,
