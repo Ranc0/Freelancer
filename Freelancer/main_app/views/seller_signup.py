@@ -1,12 +1,8 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from ..models import Profile
 from ..models import Seller_Account
-from ..models import Customer_Account
 from .. import validators as v
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST'])

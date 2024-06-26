@@ -1,12 +1,8 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from ..models import Profile
 from .. import validators as v
 from ..models import Seller_Account
-from ..models import Customer_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 
 @api_view(['PUT'])

@@ -1,13 +1,9 @@
-from django.shortcuts import render
-from django.http import JsonResponse
 from rest_framework.decorators import api_view ,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from datetime import date
-from ..models import Deal_With , Review , Seller_Account , Profile 
-from django.contrib.auth.models import User, auth
+from ..models import Deal_With
+from django.contrib.auth.models import User
 from django.db.models import Q
-import datetime
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_service(requset , customer_id , seller_id , profile_id):
