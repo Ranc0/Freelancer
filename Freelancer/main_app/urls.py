@@ -21,6 +21,10 @@ from .views import explore_chats
 from .views import add_review
 from .views import start_service
 from .views import end_service
+from .views import service_requests
+from .views import active_services
+from .views import accept_service
+from .views import delete_service
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -48,7 +52,11 @@ urlpatterns = [
     path('chat/<int:id>', get_chat),
     path('chats' , explore_chats),
     path('add_review/<int:id1>/<int:id2>', add_review),
-    path('start_service/<int:id>/<int:id2>', start_service),
-    path('end_service/<int:id>/<int:id2>', end_service)
+    path('service/start/<int:id>/<int:id2>', start_service),
+    path('service/end/<int:id>/<int:id2>', end_service),
+    path('service/requests', service_requests),
+    path('service/active', active_services),
+    path('service/accept', accept_service),
+    path('service/delete', delete_service),
 
 ]

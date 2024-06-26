@@ -25,6 +25,10 @@ def start_service(request, id , id2):
     
     seller_profile = profile_query[0]
     
+    exists = Deal_With.objects.filter(User = seller_user and Q(person2_id = customer_user.id))
+    if (exists) :
+          return Response({"error": "a request to this profile alreay exisits , you can either delete it or wait till accepted"})
+        
     service = Deal_With.objects.create(
         user = seller_user,
         profile = seller_profile.profile_seller_id,

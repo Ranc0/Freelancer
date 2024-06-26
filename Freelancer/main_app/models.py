@@ -76,6 +76,8 @@ class Deal_With(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)
     profile = models.IntegerField(null=True)
     person2_id = models.CharField(max_length=50 , null=True)
+    send_date = models.DateField(auto_now_add=True)
+    send_time = models.TimeField(auto_now_add = True)
     is_accepted = models.IntegerField(default=0)
     is_active = models.IntegerField(default=1)
     accept_time = models.DateField(null=True)
