@@ -17,6 +17,9 @@ def end_service(request, id , id2):
     if not customer_user.exists():
         return Response({"error": "no user with this id"})
     
+    if (not Seller_Account.objects.filter(user = request.user)):
+         return Response({"error": " you must be a seller to end your services"})
+    
     customer_user = customer_user[0]
     service = Deal_With.objects.filter(user = seller_user).filter(person2_id = customer_user.id).filter(profile = id2)
     if not service.exists():

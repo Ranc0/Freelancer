@@ -11,6 +11,12 @@ import datetime
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_service(requset , customer_id , seller_id , profile_id):
+    customer_user = User.objects.filter(id = customer_id) 
+    seller_user = User.objects.filter(id = seller_id)
+
+    if (requset.user != customer_user and requset.user != seller_user):
+        return Response ({"error" : "you can't delete someone else's service offers"})
+    
     service_object = Deal_With.objects.filter(user = seller_id and Q(person2_id = customer_id) 
                                               and Q(profile = profile_id))
     if (not service_object) :

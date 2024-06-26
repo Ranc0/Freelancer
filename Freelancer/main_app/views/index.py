@@ -102,7 +102,47 @@ def index (request) :
             "endpoint" : "chat/target_id",
             "method" : 'get',
             "description" : "you get your chat with this target_id  ,  ((access)) token should be included in the request header "
-        }
-
+        },
+        {
+            "endpoint" : "review/add/seller_account_id/profile_id",
+            "method" : 'post',
+            "description" : "you send your json file with ((rate)) and ((comment)) attribues , comment is optional ,  ((access)) token should be included in the request header "
+        },
+        {
+            "endpoint" : "review/explore/seller_account_id/profile_id",
+            "method" : 'get',
+            "description" : "you get the reviews associated to this profile "
+        },
+        {
+            "endpoint" : "service/start/seller_id/profile_id",
+            "method" : 'post',
+            "description" : " you - as a customer -  add a service request for this profile ,  ((access)) token should be included in the request header "
+        },
+        {
+            "endpoint" : "service/end/customer_id/profile_id",
+            "method" : 'post',
+            "description" : " you - as a seller -  end the service with this customer and it's removed from your active services ,  ((access)) token should be included in the request header "
+        },
+        {
+            "endpoint" : "service/requests",
+            "method" : 'get',
+            "description" : " you - as a seller - fetch your service requests ,  ((access)) token should be included in the request header "
+        },
+         {
+            "endpoint" : "service/active",
+            "method" : 'get',
+            "description" : " you - as a seller - fetch the services you are working on ,  ((access)) token should be included in the request header "
+        },
+        {
+            "endpoint" : "service/accept/customer_id/profile_id",
+            "method" : 'post',
+            "description" : " you - as a seller -  accept a service and it's added to your active services ,  ((access)) token should be included in the request header "
+        },
+        {
+            "endpoint" : "service/delete/customer_id/seller_id/profile_id",
+            "method" : 'delete',
+            "description" : " you - as a seller or customer - can delete a service requset if it's not accepted yet ,  ((access)) token should be included in the request header "
+        },
+        
             ]
     return Response(routes)

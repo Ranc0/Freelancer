@@ -16,7 +16,10 @@ def add_review(request , id1 , id2 ):
     seller_query = User.objects.filter(id = id1)
     if not seller_query.exists() :
          return Response({"error": "no user with this id"})
-    
+    customer_account = customer_account.objects.filter(user = request.user)
+    if not customer_account :
+         return Response({"error": "you can add reviews from customer account only"})
+
     seller_user = seller_query[0]
     seller_account = Seller_Account.objects.get(username = seller_user)
     profile_query = Profile.objects.filter(seller_account = seller_account).filter(profile_seller_id=id2)
@@ -42,12 +45,17 @@ def add_review(request , id1 , id2 ):
     data = request.data
     rate = 0
     comment = ""
+    found_rate = 0
     for i, j in data.items():
-         if i == 'rate':
+         if i == 'rate' and j>0:
               rate += j 
+              found_rate=1
+          
          elif i == 'comment':
               comment += j
-     
+    if(found_rate==0):
+         return Response({"error":"rating must be added with at least 1 star"})
+         
     review_query = Review.objects.filter(user = seller_user).filter(person2_id = customer_user.id)
     if review_query.exists():
           review = review_query[0]

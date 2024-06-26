@@ -37,8 +37,8 @@ def seller_signup (request) :
     password2 = data['password2']
     
     if (password==password2):
-        if (User.objects.filter(email=email).exists()):
-            now = {'error': "email is already used"}
+        if (Seller_Account.objects.filter(email=email).exists()):
+            now = {'error': "this email is already used by a seller "}
             return Response (now)
         elif User.objects.filter(username=username).exists():
             now = {'error': "username already used"}

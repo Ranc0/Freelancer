@@ -24,3 +24,4 @@ from .service_requests import *
 from .active_services import *
 from .accept_service import *
 from .delete_service import *
+from .explore_reviews import *

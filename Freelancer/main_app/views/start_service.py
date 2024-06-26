@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view ,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from datetime import date
-from ..models import Deal_With , Review , Seller_Account , Profile 
+from ..models import Deal_With , Review , Seller_Account , Profile , Customer_Account 
 from django.contrib.auth.models import User, auth
 from django.db.models import Q
 
@@ -15,6 +15,9 @@ def start_service(request, id , id2):
     seller_user = User.objects.filter(id = id)
     if not seller_user.exists():
         return Response({"error": "no user with this id"})
+    
+    if (not Customer_Account.objects.filter(user = request.user)):
+         return Response({"error": " you must be a customer to start a service"})
     
     seller_user = seller_user[0]
     seller_account = Seller_Account.objects.get(username = seller_user)
