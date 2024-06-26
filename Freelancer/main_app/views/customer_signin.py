@@ -16,7 +16,10 @@ def customer_signin (request) :
 
     if User.objects.filter(username = data['username']).exists():
         user = User.objects.get(username = data['username'])
-        customer_account = Customer_Account.objects.get(username = user)
+        customer_account = Customer_Account.objects.filter(username = user)
+        if (not customer_account):
+             return Response({ "error" : "there is no customer with this username , are you sure you want to log in as a customer ?" })
+        customer_account = customer_account[0]
         now = customer_account.serialize()
         now.update({ "id" : customer_account.username_id })
         now.update({ "error" : "no error found"})

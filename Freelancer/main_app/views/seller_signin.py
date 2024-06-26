@@ -21,7 +21,9 @@ def seller_signin (request) :
         return Response ({"error" : "incorrect password"})
     
     if User.objects.filter(username = data['username']).exists():
-        seller_account = Seller_Account.objects.get(username = user)
+        seller_account = Seller_Account.objects.filter(username = user)
+        if (not seller_account):
+             return Response({ "error" : "there is no seller with this username , are you sure you want to log in as a seller ?" })
         now = seller_account.serialize()
         now.update({ "id" : seller_account.username_id })
         now.update({ "error" : 'no error found'})
