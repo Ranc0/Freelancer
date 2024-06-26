@@ -1,16 +1,21 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from ..models import Profile
-from ..models import Seller_Account
-from ..models import Customer_Account
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view ,permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from datetime import date
+from ..models import Deal_With , Review , Seller_Account , Profile 
+from django.contrib.auth.models import User, auth
+from django.db.models import Q
+import datetime
 
 @api_view(['GET'])     
-def seller_account (request , id):
+@permission_classes([IsAuthenticated])
+def seller_account (request):
     if request.method == 'GET':
-        if Seller_Account.objects.filter(username = id).exists():
-            info = Seller_Account.objects.get(username=id)
+        user = request.user
+        if Seller_Account.objects.filter(username = user).exists():
+            info = Seller_Account.objects.get(username=user)
             seller_profiles_query_set = Profile.objects.filter(seller_account = info.id)
             seller_profiles = []
             for pro in seller_profiles_query_set:

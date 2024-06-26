@@ -10,11 +10,12 @@ from datetime import date
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def seller_create_profile (request,id): 
+def seller_create_profile (request): 
     data = request.data
-    if Seller_Account.objects.filter(username = id).exists():
-        seller_account_obj = Seller_Account.objects.get(username=id)       
-        cnt = Profile.objects.filter(seller_account_id = seller_account_obj.pk).count()
+    user = request.user
+    if Seller_Account.objects.filter(username = user).exists():
+        seller_account_obj = Seller_Account.objects.get(username=user)       
+        cnt = Profile.objects.filter(seller_account_id = seller_account_obj.id).count()
         seller_profile = Profile.objects.create(
                     profile_seller_id = cnt+1,
                     language = data['language'],
@@ -26,7 +27,7 @@ def seller_create_profile (request,id):
                     seller_account = seller_account_obj,
         )
         now= seller_profile.serialize()
-        now.update({'id': seller_profile.id})
+        now.update({'id': seller_profile.profile_seller_id})
         now.update({'error': "no error found"})
         return Response (now)
     else:

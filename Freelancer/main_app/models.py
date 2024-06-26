@@ -73,41 +73,63 @@ class Customer_Account(models.Model):
         }
     
 class Deal_With(models.Model):
-    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE, default = 1,related_name='deal_with_customer')
-    seller_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, default = 1,related_name='deal_with_customer')
-    customer_account = models.ForeignKey(Customer_Account, on_delete=models.CASCADE, default = 1,related_name='deal_with_seller')
-    created_at = models.DateField(auto_now_add=True)
-    start_service = models.IntegerField(default=0)
-    end_service = models.IntegerField(default=0)
-    rating = models.IntegerField(default=0)
-    comment = models.TextField(null=True)
-    def serialize(self): 
+    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)
+    profile = models.IntegerField(null=True)
+    person2_id = models.CharField(max_length=50 , null=True)
+    is_accepted = models.IntegerField(default=0)
+    is_active = models.IntegerField(default=1)
+    accept_time = models.DateField(null=True)
+    end_time = models.DateField(null=True)
+    def serialize(self):
         return {
-            "id" : self.id,
-            "seller_account": self.seller_account,
-            "seller_profile": self.seller_profile,
-            "customer_account": self.customer_account,
-            "start_service": self.start_service,
-            "end_service": self.end_service,
-            "rating": self.rating,
-            "comment": self.comment,
+            "seller_user" : self.user.id,
+            "profile_id" : self.profile,
+            "customer_user" : self.person2_id,
+            "is_accepted": self.is_accepted,
+            "is_active" : self.is_active,
+            "accept_time" : self.accept_time,
+            "end_time" : self.end_time,
         }
     
-class Message (models.Model):
+class Review(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)
+    profile = models.IntegerField(null=True)
+    person2_id = models.CharField(max_length=50 , null=True)
+    rate = models.IntegerField(default=0)
+    comment = models.TextField(null=True)
+    def serialize(self):
+        return {
+            "profile_id" : self.profile,
+            "customer_id" : self.person2_id,
+            "rate" : self.rate,
+            "comment" : self.comment
+        }
+
+
+class Chat(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)   
+    person2_id = models.CharField(max_length=50 , null=True)
+    unread_cnt = models.IntegerField(default=0)
+    def serialize(self):
+        return {
+            "id" : self.person2_id,
+            "unread_cnt" : self.unread_cnt
+        }
+class Message (models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE , null = True)
     message = models.TextField()
-    sender = models.CharField(max_length=50)
-    reciever = models.CharField(max_length=50)
+    sender = models.CharField(max_length=50 , null=True)
+    reciever = models.CharField(max_length=50 , null = True) 
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
 
     def serialize(self): 
         return {
             "message": self.message,
+            "date" : self.date,
+            "time": self.time,
             "sender" : self.sender,
             "reciever" : self.reciever,
-            "date" : self.date,
-            "time": self.time
         }
 
 

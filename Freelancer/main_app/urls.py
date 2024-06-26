@@ -17,6 +17,10 @@ from .views import customer_update_account
 from .views import forms
 from .views import send_message
 from .views import get_chat
+from .views import explore_chats
+from .views import add_review
+from .views import start_service
+from .views import end_service
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -24,8 +28,8 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('',index, name='index'),
-    path('account/seller/<int:id>' , seller_account , name='seller_account'),
-    path('account/seller/<int:id1>/profile/<int:id2>' ,seller_profile , name='seller_profile'),
+    path('account/seller' , seller_account , name='seller_account'),
+    path('account/seller/profile/<int:id2>' ,seller_profile , name='seller_profile'),
     path('account/customer/<int:id>', customer_account),
     path('homepage', homepage),
     path('signup/seller', seller_signup),
@@ -33,7 +37,7 @@ urlpatterns = [
     path('update/seller/<int:id>', seller_update_account),
     path('signin/seller', seller_signin),
     path('update/seller/<int:id1>/profile/<int:id2>', seller_update_profile),
-    path('create/seller/<int:id>/profile', seller_create_profile),
+    path('create/seller/profile', seller_create_profile),
     path('delete/seller/<int:id1>/profile/<int:id2>', seller_delete_profile),
     path('signup/customer', customer_signup),
     path('signin/customer', customer_signin),
@@ -42,5 +46,9 @@ urlpatterns = [
     path('forms', forms),
     path('chat/send/<int:id>', send_message),
     path('chat/<int:id>', get_chat),
+    path('chats' , explore_chats),
+    path('add_review/<int:id1>/<int:id2>', add_review),
+    path('start_service/<int:id>/<int:id2>', start_service),
+    path('end_service/<int:id>/<int:id2>', end_service)
 
 ]
