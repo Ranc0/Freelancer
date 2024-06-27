@@ -20,7 +20,8 @@ def seller_create_profile (request):
                     bio = data['bio'],
                     provided_services = 0 ,
                     member_since = date.today(),
-                    rate = 0,
+                    rate_sum = 0,
+                    rate_cnt = 0 ,
                     seller_account = seller_account_obj,
         )
         now= seller_profile.serialize()

@@ -6,9 +6,12 @@ from ..models import Message , Chat
 @permission_classes([IsAuthenticated])
 def get_chat(request , id ):
     user1 = request.user
-    chat = Chat.objects.filter( user = user1 ).get( person2_id = id )
-    messages = Message.objects.filter(chat = chat)
+    chat = Chat.objects.filter( user = user1 ).filter( person2_id = id )
     serialized_messages = []
+    if (not chat):
+        return Response ({"messages":serialized_messages})
+    chat = chat[0]
+    messages = Message.objects.filter(chat = chat)
     for i in messages:
        serialized_messages.append(i.serialize())
     now = {}

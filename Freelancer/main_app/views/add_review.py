@@ -2,7 +2,7 @@
 from rest_framework.decorators import api_view ,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from ..models import Deal_With , Review , Seller_Account , Profile
+from ..models import Deal_With , Review , Seller_Account , Profile , Customer_Account
 from django.contrib.auth.models import User
 import datetime
 
@@ -13,7 +13,7 @@ def add_review(request , id1 , id2 ):
     seller_query = User.objects.filter(id = id1)
     if not seller_query.exists() :
          return Response({"error": "no user with this id"})
-    customer_account = customer_account.objects.filter(user = request.user)
+    customer_account = Customer_Account.objects.filter(username = request.user)
     if not customer_account :
          return Response({"error": "you can add reviews from customer account only"})
 

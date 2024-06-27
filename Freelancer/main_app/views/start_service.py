@@ -13,7 +13,7 @@ def start_service(request, id , id2):
     if not seller_user.exists():
         return Response({"error": "no user with this id"})
     
-    if (not Customer_Account.objects.filter(user = request.user)):
+    if (not Customer_Account.objects.filter(username = request.user)):
          return Response({"error": " you must be a customer to start a service"})
     
     seller_user = seller_user[0]
