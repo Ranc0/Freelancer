@@ -7,7 +7,7 @@ from ..models import Message , Chat
 @permission_classes([IsAuthenticated])
 def explore_chats(request):
     user1 = request.user
-    chats = Chat.objects.filter( user = user1 )
+    chats = Chat.objects.filter( user = user1 ).order_by(-'time')
     unread_chats = 0 
     
     serialized_chats = []
@@ -16,8 +16,14 @@ def explore_chats(request):
        if serialized_chat['unread_cnt']:
            unread_chats += 1
        last_message = Message.objects.filter(chat = i).last()
-       last_message = last_message.serialize()
-       serialized_chat.update({ "last_message" : last_message })
+
+       serialized_chat.update({ "last_message" : last_message.message })
+       serialized_chat.update({ "username" : i.person2_username})
+       serialized_chat.update({ "date" : last_message.date })
+       serialized_chat.update({ "time" : last_message.time })
+       serialized_chat.update({ "sender" : last_message.sender })
+       serialized_chat.update({ "reciever" : last_message.reciever })
+       
        serialized_chats.append(serialized_chat)
     now = {}
     now.update({"unread_chats" : unread_chats})

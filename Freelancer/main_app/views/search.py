@@ -2,6 +2,7 @@ from ..models import Profile
 from ..models import Seller_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth.models import User
         
 @api_view(['POST'])
 def search(request):
@@ -31,15 +32,19 @@ def search(request):
                 info = info.filter(is_active = j)
         profiles = []
         for profile in info:
+            seller_obj = Seller_Account.objects.get(id =profile.seller_account.pk)
+            username = seller_obj.username.username
             profiles.append({
                 "profile_id": profile.profile_seller_id,
-                "account_id": profile.seller_account.pk,
+                "username": username,
+                "first_name": seller_obj.first_name,
+                "second_name": seller_obj.second_name,
                 "language" : profile.language,
                 "work_group" : profile.work_group,
                 "bio" : profile.bio,
                 "provided_services": profile.provided_services,
                 "member_since" : profile.member_since,
-                "rate" : profile.rate_sum / profile.cnt,
+                "rate" : profile.rate_sum / profile.rate_cnt,
                 "is_active" : profile.is_active
             })
         dectionary = {'profiles': profiles}

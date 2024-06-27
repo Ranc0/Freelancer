@@ -116,8 +116,9 @@ class Review(models.Model):
 
 class Chat(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)   
-    person2_id = models.CharField(max_length=50 , null=True)
+    person2_username = models.CharField(max_length=50 , null=True)
     unread_cnt = models.IntegerField(default=0)
+    time = models.DateTimeField(null=True)
     def serialize(self):
         return {
             "id" : self.person2_id,

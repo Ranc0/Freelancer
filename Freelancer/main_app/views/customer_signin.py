@@ -30,6 +30,7 @@ def customer_signin (request) :
         now = customer_account.serialize()
         now.update({ "id" : customer_account.username_id })
         now.update({ "error" : "no error found"})
+        now.update({'username': user.username})
         refresh = RefreshToken.for_user(user)
         now.update({'refresh': str(refresh)})
         now.update({'access': str(refresh.access_token)})

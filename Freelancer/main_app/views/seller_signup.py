@@ -26,6 +26,8 @@ def seller_signup (request) :
     if cnt != 13:
         return Response({ "error" : "some values are empty" })
     username = data['username']
+    if (len(username>50)):
+         return Response({ "error" : "username max length is 50" })
     email = data['email']
     password = data['password']
     password2 = data['password2']
@@ -57,6 +59,7 @@ def seller_signup (request) :
                     now = seller_account.serialize()
                     now.update({'id': user.id})
                     now.update({'error': "no error found"})
+                    now.update({'username': user.username})
                     user.save()
                     refresh = RefreshToken.for_user(user)
                     now.update({'refresh': str(refresh)})

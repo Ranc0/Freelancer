@@ -1,4 +1,4 @@
-from ..models import Profile
+from ..models import Profile ,Seller_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
         
@@ -8,9 +8,14 @@ def homepage(request):
         info = Profile.objects.filter(is_active = True).order_by('-rate')
         profiles = []
         for profile in info:
+            seller_obj = Seller_Account.objects.get(id =profile.seller_account.pk)
+            username = seller_obj.username.username
+
             profiles.append({
                 "profile_id": profile.profile_seller_id,
-                "account_id": profile.seller_account.pk,
+                "username": username,
+                "first_name": seller_obj.first_name,
+                "second_name": seller_obj.second_name,
                 "language" : profile.language,
                 "work_group" : profile.work_group,
                 "bio" : profile.bio,
