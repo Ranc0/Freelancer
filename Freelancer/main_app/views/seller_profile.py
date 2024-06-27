@@ -13,5 +13,7 @@ def seller_profile (request , id2):
         info = {}
         info.update({"user_id":user.id})
         info.update({"profile_id":id2})
+        rate = seller_profile.rate_sum /  seller_profile.rate_cnt
+        info.update({"rate":rate})
         info .update(seller_profile.serialize())
         return Response(info)

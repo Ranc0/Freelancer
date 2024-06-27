@@ -36,7 +36,9 @@ class Profile(models.Model):
     bio = models.TextField(null=True)
     provided_services = models.IntegerField(default=0)
     member_since = models.DateTimeField(auto_now=True)
-    rate = models.FloatField(default=0.0)
+    rate_sum = models.FloatField(default=0.0)
+    rate_cnt = models.FloatField(default=0.0)
+    is_active = models.BooleanField(default=True)
     seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE, default = 1,related_name='profile' )
     def serialize(self):
         return {
@@ -44,7 +46,10 @@ class Profile(models.Model):
             "work_group": self.work_group,
             "bio": self.bio,
             "provided_services": self.provided_services,
-            "member_since": self.member_since
+            "member_since": self.member_since,
+            "is_active" : self.is_active 
+            
+
         }
     
     #collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
@@ -101,6 +106,7 @@ class Review(models.Model):
     comment = models.TextField(null=True)
     def serialize(self):
         return {
+            "review_id" : self.id,
             "profile_id" : self.profile,
             "customer_id" : self.person2_id,
             "rate" : self.rate,

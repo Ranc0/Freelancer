@@ -24,8 +24,10 @@ def start_service(request, id , id2):
          return Response({"error": "no profile with this id"})
     
     seller_profile = profile_query[0]
+    if (seller_profile.is_active==False):
+          return Response({"error": "can't start a service with a profile that is not activated"})
     
-    exists = Deal_With.objects.filter(User = seller_user and Q(person2_id = customer_user.id))
+    exists = Deal_With.objects.filter(Q(User = seller_user) and Q(person2_id = customer_user.id))
     if (exists) :
           return Response({"error": "a request to this profile alreay exisits , you can either delete it or wait till accepted"})
         

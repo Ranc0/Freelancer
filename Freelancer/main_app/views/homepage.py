@@ -5,7 +5,7 @@ from rest_framework.response import Response
 @api_view(['GET'])
 def homepage(request):
     if request.method == 'GET':
-        info = Profile.objects.all().order_by('-rate')
+        info = Profile.objects.filter(is_active = True).order_by('-rate')
         profiles = []
         for profile in info:
             profiles.append({
@@ -16,7 +16,8 @@ def homepage(request):
                 "bio" : profile.bio,
                 "provided_services": profile.provided_services,
                 "member_since" : profile.member_since,
-                "rate" : profile.rate,
+                "rate" : profile.rate_sum / profile.rate_cnt,
+                "is_active" : profile.is_active
             })
         dectionary = {'profiles': profiles}
         return Response(dectionary)

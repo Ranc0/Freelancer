@@ -27,6 +27,8 @@ def search(request):
                 info = info.filter(provided_services__gte = j)
             elif i == "rate":
                 info = info.filter(rate__gte = j)
+            elif i == "active":
+                info = info.filter(is_active = j)
         profiles = []
         for profile in info:
             profiles.append({
@@ -37,7 +39,8 @@ def search(request):
                 "bio" : profile.bio,
                 "provided_services": profile.provided_services,
                 "member_since" : profile.member_since,
-                "rate" : profile.rate,
+                "rate" : profile.rate_sum / profile.cnt,
+                "is_active" : profile.is_active
             })
         dectionary = {'profiles': profiles}
         return Response(dectionary)

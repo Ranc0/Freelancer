@@ -31,7 +31,7 @@ def index (request) :
         {
             "endpoint" : 'search',
             "method" : 'post',
-            "description" : "you send a json file with the attributes you want to filter on , you can filter on (first_name, second_name, work_group, provided_services, rate)"
+            "description" : "you send a json file with the attributes you want to filter on , you can filter on (first_name, second_name, work_group, provided_services, rate , active)"
 
         },
          {

@@ -7,7 +7,7 @@ from django.db.models import Q
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def active_services (request):
-    active = Deal_With.objects.filter(user = request.user and Q(is_accepted = True) and Q(is_active = 1) )
+    active = Deal_With.objects.filter(Q(user = request.user) and Q(is_accepted = True) and Q(is_active = 1) )
     serialized_active_services= []
     for i in active :
         profile_object = Profile.objects.get(id = i.profile)

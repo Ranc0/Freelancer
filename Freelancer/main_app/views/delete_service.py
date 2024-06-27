@@ -13,7 +13,7 @@ def delete_service(requset , customer_id , seller_id , profile_id):
     if (requset.user != customer_user and requset.user != seller_user):
         return Response ({"error" : "you can't delete someone else's service offers"})
     
-    service_object = Deal_With.objects.filter(user = seller_id and Q(person2_id = customer_id) 
+    service_object = Deal_With.objects.filter(Q(user = seller_id) and Q(person2_id = customer_id) 
                                               and Q(profile = profile_id))
     if (not service_object) :
         return Response ({"error" : "such service doesn't exist"})

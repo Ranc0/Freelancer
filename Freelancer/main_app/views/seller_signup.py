@@ -19,8 +19,6 @@ def seller_signup (request) :
         if i in arr:
             dic[i] += 1
     
-
-
     for i,j in dic.items():
         if j > 1:
             return Response({ "error" : "some values are duplicate" })

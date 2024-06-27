@@ -10,11 +10,11 @@ def explore_reviews(request , seller_id , profile_id):
     if (not seller_user) :
          return Response({"error": "no seller with this id"})
     
-    profile = Profile.objects.filter(Seller_Account = seller_id and Q(id =profile_id) )
+    profile = Profile.objects.filter(Q(Seller_Account = seller_id ) and Q(id =profile_id) )
     if (not profile) :
          return Response({"error": "no profile with this id for this user"})
 
-    reviews = Review.objects.filter(user = seller_id and Q(profile = profile_id))
+    reviews = Review.objects.filter(Q(user = seller_id ) and Q(profile = profile_id))
     reviews_serialized = []
     for i in reviews:
         obj = i.serialize()

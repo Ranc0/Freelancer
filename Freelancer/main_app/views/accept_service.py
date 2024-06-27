@@ -7,7 +7,7 @@ import datetime
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def accept_service (requset , customer_id , profile_id):
-    service_object = Deal_With.objects.filter(user = requset.user and Q(person2_id = customer_id) 
+    service_object = Deal_With.objects.filter(Q(user = requset.user) and Q(person2_id = customer_id) 
                                               and Q(profile = profile_id))
     if (not service_object) :
         return Response ({"error" : "such service doesn't exist"})
