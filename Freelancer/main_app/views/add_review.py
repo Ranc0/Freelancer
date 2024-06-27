@@ -60,8 +60,8 @@ def add_review(request , id1 , id2 ):
           review.rate = rate
           if comment != "" :
                review.comment = comment
-          seller_profile.rate -= old_rate
-          seller_profile.rate += rate
+          seller_profile.rate_sum -= old_rate
+          seller_profile.rate_sum += rate
 
           review.save()
     else:
@@ -72,7 +72,8 @@ def add_review(request , id1 , id2 ):
               rate = rate,
               comment = comment
          )
-         seller_profile.rate += rate
+         seller_profile.rate_sum += rate
+         seller_profile.rate_cnt += 1
     seller_profile.save()
 
     now = review.serialize()
