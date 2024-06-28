@@ -9,8 +9,16 @@ from datetime import datetime
 @permission_classes([IsAuthenticated])
 def send_message(request , username):
     user1 = request.user
-    sender_id = user1.id
-    text = request.data["message"]
+    data = request.data
+    
+    b = False
+    text = ""
+    for i,j in data.items():
+         if i == "message":
+              text = j
+         else:
+              b = True
+              img_message = j
     user2 = User.objects.filter(username=username)
     if (not user2):
          return Response({"error": "no user with this username"})
@@ -51,6 +59,10 @@ def send_message(request , username):
         sender = user1.username,
         reciever = username
     )
+    if b :
+          message1.image_message = img_message
+          message2.image_message = img_message
+          
     message1.save()
     message2.save()
     return Response({"error": "no error found"})

@@ -128,11 +128,13 @@ class Chat(models.Model):
     def serialize(self):
         return {
             "person2 username" : self.person2_username,
-            "unread_cnt" : self.unread_cnt
+            "unread_cnt" : self.unread_cnt,
         }
+    
 class Message (models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE , null = True)
     message = models.TextField()
+    image_message = models.TextField(max_length=900000, blank=True, null = True )
     sender = models.CharField(max_length=50 , null=True)
     reciever = models.CharField(max_length=50 , null = True) 
     date = models.DateField(auto_now_add=True)
@@ -141,6 +143,7 @@ class Message (models.Model):
     def serialize(self): 
         return {
             "message": self.message,
+            "image_message" : self.image_message,
             "date" : self.date,
             "time": self.time,
             "sender" : self.sender,

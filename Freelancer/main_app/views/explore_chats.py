@@ -24,6 +24,8 @@ def explore_chats(request):
         img = Customer_Account.objects.get(username = user2).img
 
        serialized_chat.update({ "last_message" : last_message.message })
+       if last_message.image_message:
+          serialized_chat.update({ "image_message" : last_message.image_message })
        serialized_chat.update({ "username" : i.person2_username})
        serialized_chat.update({ "date" : last_message.date })
        serialized_chat.update({ "time" : last_message.time })
