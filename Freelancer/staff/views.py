@@ -3,8 +3,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from main_app.models import Deal_With , Customer_Account,Seller_Account,Chat,Message,Review,Profile
 from django.contrib.auth.models import User
-from django.db.models import Q
-from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 
@@ -76,7 +74,7 @@ def sign_in (request):
          return Response ({"result" : "this username doesn't exist as a staff member"})
     user = user[0]
     user_authenticated = authenticate(username=user.username, password=sent_pass)
-    if user_authenticated is not None:
+    if not user_authenticated :
         return Response ({"result" : "incorrect password"})
 
     now = {}

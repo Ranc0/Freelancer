@@ -1,8 +1,7 @@
 from ..models import Seller_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST'])
@@ -11,14 +10,12 @@ def seller_signin (request) :
     data = request.data
     if len(data['password']) == 0 or (len(data['username']) == 0 ) :
         return Response({ "error" : "some important values are not valid" })
-    user = User.objects.get(username = data['username'])
+    user = authenticate(username=data['username'], password=data['password'])
     
     seller_account =  Seller_Account.objects.filter(username = user)
     if (not seller_account.exists()):
         return Response ({"error" : "no such user as a seller , please sign up first"})
     
-    if check_password('the default password', user.password):
-        return Response ({"error" : "incorrect password"})
     if user.is_active == False:
         return Response ({"error" : "this account is banned , contact customer support if you think that was a mistake"})
         

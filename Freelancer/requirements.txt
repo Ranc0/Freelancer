@@ -4,4 +4,3 @@ pip install djangorestframework
 pip install mysql-connector-python
 pip install djangorestframework-simplejwt
 pip install mysqlclient
-pip install django-base64field
