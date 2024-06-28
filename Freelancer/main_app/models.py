@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User, auth
 from .default_for_img import *
 import base64
+from django_base64field.fields import Base64Field
+
 
 class Seller_Account(models.Model):
     username = models.ForeignKey(User , null = True , on_delete=models.CASCADE)
@@ -16,7 +18,7 @@ class Seller_Account(models.Model):
     usdt = models.BooleanField(default=False)
     al_haram = models.BooleanField(default=False)
     id_picture = models.TextField(max_length=900000, blank=True, default = default_img)
-    img = models.TextField(max_length=900000, blank=True, default = default_img )
+    img = Base64Field(max_length=900000, blank=True, default = default_img )
     def serialize(self): 
         return {
             #"id" : self.id,
@@ -70,7 +72,7 @@ class Customer_Account(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=10)
     member_since = models.DateField(auto_now_add=True)
-    img = models.TextField(max_length=900000, blank=True, default = default_img )
+    img = Base64Field(max_length=900000, blank=True, default = default_img )
     def serialize(self): 
         return {
             #"id" : self.id,
