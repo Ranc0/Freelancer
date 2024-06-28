@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view ,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
-@api_view(['POST'])
+@api_view(['PUT'])
 def customer_update_account (request) : 
     data = request.data
     user = request.user

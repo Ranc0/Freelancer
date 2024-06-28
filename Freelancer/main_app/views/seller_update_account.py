@@ -3,7 +3,7 @@ from ..models import Seller_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
-@api_view(['POST'])
+@api_view(['PUT'])
 def seller_update_account (request) : 
     data = request.data
     user = request.user
