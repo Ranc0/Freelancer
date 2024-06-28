@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 
 
 @api_view(['GET'])
@@ -65,11 +66,12 @@ def sign_in (request):
     sent_pass = request.data["password"]
     sent_username = request.data["username"]
 
-    user = User.objects.filter(Q(username = sent_username) and Q(is_staff = True))
+    user = User.objects.filter(username = sent_username).filter(is_staff = True)
     if (not user) :
          return Response ({"result" : "this username doesn't exist as a staff member"})
     user = user[0]
-    if check_password('the default password', user.password):
+    user_authenticated = authenticate(username=user.username, password=sent_pass)
+    if user_authenticated is not None:
         return Response ({"result" : "incorrect password"})
 
     now = {}
@@ -83,17 +85,23 @@ def sign_in (request):
 @permission_classes([IsAdminUser])
 def check_service(request , customer_username , seller_username , profile_id ):
 
-    if (not Customer_Account.objects.filter(username =customer_username)):
+    customer_username = User.objects.get(username = customer_username)
+    seller_username = User.objects.get(username = seller_username)
+
+    if (not Customer_Account.objects.filter(username = customer_username)):
          return Response({"result": "no customer with this username is found"})
-    if (not Seller_Account.objects.filter(username =seller_username)):
+    if (not Seller_Account.objects.filter(username = seller_username)):
          return Response({"result": "no seller with this username is found"})
-    obj = Deal_With.objects.filter(Q(user = User.objects.get(username = seller_username).id)and Q(person2_id = User.objects.get(username = customer_username.id))
-                                    and  Q(profile = profile_id)  and  Q(is_accepted = True))
+    
+    seller_account = Seller_Account.objects.get(username = seller_username)
+    if not Profile.objects.filter(seller_account = seller_account).filter(profile_seller_id = profile_id).exists():
+        return Response({"error":"there is no profile with this id for this seller"})
+    obj = obj = Deal_With.objects.filter(user = seller_username).filter(person2_id = customer_username.id).filter(profile = profile_id).filter(is_accepted = True)
     res = ""
     if (obj) :
         res = "YES ! there is a service between this profile and this customer"
     else :
-         res = "YES ! there is a service between this profile and this customer"
+         res = "No ! there is no service between this profile and this customer"
     
     return Response({"result": res})
 
@@ -106,8 +114,15 @@ def get_chat(request , username1 , username2  ):
         return Response({"result": "this username" +username1 + "doesn't exist"})
     if (not user2):
         return Response({"result": "this username" +username2 + "doesn't exist"})
+    user1 = user1[0]
+    user2 = user2[0]
+    if not Seller_Account.objects.filter(username = user1).exists() or not Customer_Account.objects.filter(username = user1).exists():
+        return Response({"error" : "first user is not a seller nor a customer"})
+    
+    if not Seller_Account.objects.filter(username = user2).exists() or not Customer_Account.objects.filter(username = user2).exists():
+        return Response({"error" : "second user is not a seller nor a customer"})
 
-    chat = Chat.objects.filter( user = user1 ).get( person2_id = user2.id )
+    chat = Chat.objects.filter( user = user1 ).get( person2_username = user2.username )
     messages = Message.objects.filter(chat = chat)
     serialized_messages = []
     for i in messages:
@@ -131,15 +146,19 @@ def delete_review(request , id ):
     obj = Review.objects.filter(id = id)
     if (not obj):
           return Response({"result": "a review with this id doesn't exist"})
-    
-    profile_id = obj[0].profile
-    seller_id = obj[0].user
-    profile = Profile.filter.get(Q(seller_account = seller_id) and Q( profile_seller_id= profile_id))
-    rate_sum = profile.rate_sum-obj.rate
-    rate_cnt = profile.rate_cnt - 1
+    obj = obj[0]
+    profile_id = obj.profile
+    seller_user = obj.user
+    seller_account = Seller_Account.objects.get(username = seller_user)
+    profile = Profile.objects.filter(seller_account = seller_account).filter( profile_seller_id = profile_id)
+    profile = profile[0]
+    profile.rate_sum -= obj.rate
+    profile.rate_cnt -= 1
+    if profile.rate_cnt :
+        profile.rate = profile.rate_sum / profile.rate_cnt
+    else:
+        profile.rate = 0
 
-    profile.rate_sum = rate_sum
-    profile.rate_cmt = rate_cnt
     profile.save()
     obj.delete()
     return Response({"result" : "deleted successfully"})
