@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from ..models import Deal_With , Review , Seller_Account , Profile , Customer_Account
 from django.contrib.auth.models import User
 import datetime
+from django.utils import timezone
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -34,10 +35,10 @@ def add_review(request , username1 , id2 ):
     
     if deal_with.end_time :
           end = deal_with.end_time
-          today = datetime.datetime.now().date()
-          days = (today - end).days
-          if days > 7 and deal_with.is_active == 0:
-               return Response({"error":"rating timeout"})
+          today = timezone.now()
+          msec = (today - end).seconds
+          if msec > 604800000 and deal_with.is_active == 0:
+               return Response({"error":"you can't rate this profile anymore"})
          
     data = request.data
     rate = 0

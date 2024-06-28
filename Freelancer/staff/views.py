@@ -88,8 +88,14 @@ def sign_in (request):
 @permission_classes([IsAdminUser])
 def check_service(request , customer_username , seller_username , profile_id ):
 
-    customer_username = User.objects.get(username = customer_username)
-    seller_username = User.objects.get(username = seller_username)
+    customer_username = User.objects.filter(username = customer_username)
+    seller_username = User.objects.filter(username = seller_username)
+    if not customer_username:
+        return Response({"error" : "there is no customer with this username"})
+    if not seller_username:
+        return Response({"error" : "there is no seller with this username"})
+    customer_username = customer_username[0]
+    seller_username = seller_username[0]
 
     if (not Customer_Account.objects.filter(username = customer_username)):
          return Response({"result": "no customer with this username is found"})

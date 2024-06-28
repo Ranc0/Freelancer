@@ -11,7 +11,7 @@ def end_service(request, username , id2):
     seller_user = request.user
     customer_user = User.objects.filter(username = username)
     if not customer_user.exists():
-        return Response({"error": "no user with this id"})
+        return Response({"error": "no user with this username"})
     
     if (not Seller_Account.objects.filter(username = request.user)):
          return Response({"error": " you must be a seller to end your services"})

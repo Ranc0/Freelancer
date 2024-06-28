@@ -92,7 +92,7 @@ class Deal_With(models.Model):
     is_accepted = models.IntegerField(default=0)
     is_active = models.IntegerField(default=1)
     accept_time = models.DateField(null=True)
-    end_time = models.DateField(null=True)
+    end_time = models.DateTimeField(null=True)
     def serialize(self):
         return {
             "seller_user" : self.user.username,
