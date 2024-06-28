@@ -12,15 +12,25 @@ def search(request):
         info = Profile.objects.all().order_by('-rate')
         account_query_set = Seller_Account.objects.all()
         for i,j in data.items():
+            if i == "username":
+                b = True
+                user = User.objects.filter(username = j)
+                if not user:
+                    list = []
+                    return Response({'profiles':list})
+                user = user[0]
+                account_query_set = account_query_set.filter(username = user )
             if i == "first_name":
                 b = True
                 account_query_set = account_query_set.filter(first_name__icontains = j)
             elif i == "second_name":
                 b = True
                 account_query_set = account_query_set.filter(second_name__icontains = j)
+
         if b == True:
             ids_array = account_query_set.only('id')
             info = info.filter(seller_account__in = ids_array)
+
         for i,j in data.items():
             if i == "work_group":
                 info = info.filter(work_group__in = j)
@@ -34,17 +44,22 @@ def search(request):
         for profile in info:
             seller_obj = Seller_Account.objects.get(id =profile.seller_account.pk)
             username = seller_obj.username.username
+
+            if profile.rate_cnt:
+                rate = profile.rate_sum / profile.rate_cnt
+            else:
+                rate = 0
             profiles.append({
-                "profile_id": profile.profile_seller_id,
                 "username": username,
                 "first_name": seller_obj.first_name,
                 "second_name": seller_obj.second_name,
+                "profile_id": profile.profile_seller_id,
                 "language" : profile.language,
                 "work_group" : profile.work_group,
                 "bio" : profile.bio,
                 "provided_services": profile.provided_services,
                 "member_since" : profile.member_since,
-                "rate" : profile.rate_sum / profile.rate_cnt,
+                "rate" : rate,
                 "is_active" : profile.is_active
             })
         dectionary = {'profiles': profiles}

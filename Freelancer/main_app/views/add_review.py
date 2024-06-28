@@ -8,11 +8,11 @@ import datetime
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def add_review(request , id1 , id2 ):
+def add_review(request , username1 , id2 ):
     customer_user = request.user
-    seller_query = User.objects.filter(id = id1)
+    seller_query = User.objects.filter(username = username1)
     if not seller_query.exists() :
-         return Response({"error": "no user with this id"})
+         return Response({"error": "no user with this username"})
     customer_account = Customer_Account.objects.filter(username = request.user)
     if not customer_account :
          return Response({"error": "you can add reviews from customer account only"})
@@ -33,8 +33,8 @@ def add_review(request , id1 , id2 ):
          return Response({"error" : "you can't rate someone who didn't accept your offer"})
     
     if deal_with.end_time :
-          end = datetime.strptime(deal_with.end_time, "%Y-%m-%d")
-          today = datetime.strptime(datetime.datetime.now().date(), "%Y-%m-%d")
+          end = deal_with.end_time
+          today = datetime.datetime.now().date()
           days = (today - end).days
           if days > 7 and deal_with.is_active == 0:
                return Response({"error":"rating timeout"})
@@ -44,24 +44,26 @@ def add_review(request , id1 , id2 ):
     comment = ""
     found_rate = 0
     for i, j in data.items():
-         if i == 'rate' and j>0:
+         if i == 'rate' :
+              j = int(j)
               rate += j 
               found_rate=1
           
          elif i == 'comment':
               comment += j
-    if(found_rate==0):
+    if found_rate==0:
          return Response({"error":"rating must be added with at least 1 star"})
          
-    review_query = Review.objects.filter(user = seller_user).filter(person2_id = customer_user.id)
+    review_query = Review.objects.filter(user = seller_user).filter(person2_id = customer_user.id).filter(profile = id2)
     if review_query.exists():
           review = review_query[0]
           old_rate = review.rate
           review.rate = rate
-          if comment != "" :
-               review.comment = comment
+          review.comment = comment
           seller_profile.rate_sum -= old_rate
           seller_profile.rate_sum += rate
+          seller_profile.rate = seller_profile.rate_sum / seller_profile.rate_cnt
+          #return Response({"old_rate":old_rate})
 
           review.save()
     else:
@@ -74,6 +76,7 @@ def add_review(request , id1 , id2 ):
          )
          seller_profile.rate_sum += rate
          seller_profile.rate_cnt += 1
+         seller_profile.rate = seller_profile.rate_sum / seller_profile.rate_cnt
     seller_profile.save()
 
     now = review.serialize()

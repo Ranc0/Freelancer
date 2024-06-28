@@ -11,6 +11,8 @@ def get_chat(request , username ):
     if (not chat):
         return Response ({"messages":serialized_messages})
     chat = chat[0]
+    chat.unread_cnt = 0
+    chat.save()
     messages = Message.objects.filter(chat = chat)
     for i in messages:
        serialized_messages.append(i.serialize())

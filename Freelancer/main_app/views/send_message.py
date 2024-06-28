@@ -33,7 +33,7 @@ def send_message(request , username):
          chat1 = chat[0]
          chat1.unread_cnt = 0
          chat1.time =datetime.now()
-         chat2 = Chat.objects.filter(user = user2).get(person2_username = username)
+         chat2 = Chat.objects.filter(user = user2).get(person2_username = user1)
          chat2.unread_cnt += 1
          chat2.time = datetime.now()
          chat1.save()

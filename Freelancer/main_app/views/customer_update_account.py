@@ -1,19 +1,20 @@
 from ..models import Seller_Account
 from ..models import Customer_Account
 from .. import validators as v
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view ,permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 
 @api_view(['PUT'])
-def customer_update_account (request , id) : 
+def customer_update_account (request) : 
     data = request.data
-    if not Customer_Account.objects.filter(username = id).exists():
-        return Response({ "error" : "no customer with this id" })
+    user = request.user
+    if not Customer_Account.objects.filter(username = user).exists():
+        return Response({ "error" : "no customer with this username" })
     
-    account =  Customer_Account.objects.get(username=id)
-    user = User.objects.get(id=id)
+    account =  Customer_Account.objects.get(username=user)
     
     if check_password('the default password', user.password):
         return Response ({"error" : "incorrect password"})

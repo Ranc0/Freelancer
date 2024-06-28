@@ -5,11 +5,15 @@ from rest_framework.response import Response
 @api_view(['GET'])
 def homepage(request):
     if request.method == 'GET':
-        info = Profile.objects.filter(is_active = True).order_by('-rate')
+        info = Profile.objects.filter(is_active = True)
         profiles = []
         for profile in info:
             seller_obj = Seller_Account.objects.get(id =profile.seller_account.pk)
             username = seller_obj.username.username
+            if profile.rate_cnt:
+                rate = profile.rate_sum / profile.rate_cnt
+            else:
+                rate = 0
 
             profiles.append({
                 "profile_id": profile.profile_seller_id,
@@ -21,8 +25,9 @@ def homepage(request):
                 "bio" : profile.bio,
                 "provided_services": profile.provided_services,
                 "member_since" : profile.member_since,
-                "rate" : profile.rate_sum / profile.rate_cnt,
+                "rate" : rate ,
                 "is_active" : profile.is_active
             })
-        dectionary = {'profiles': profiles}
+        profiles_sorted = sorted(profiles, key=lambda x: x["rate"], reverse=True)
+        dectionary = {'profiles': profiles_sorted}
         return Response(dectionary)

@@ -38,6 +38,7 @@ class Profile(models.Model):
     member_since = models.DateTimeField(auto_now=True)
     rate_sum = models.FloatField(default=0.0)
     rate_cnt = models.FloatField(default=0.0)
+    rate = models.FloatField(default=0.0)
     is_active = models.BooleanField(default=True)
     seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE, default = 1,related_name='profile' )
     def serialize(self):
@@ -89,9 +90,9 @@ class Deal_With(models.Model):
     end_time = models.DateField(null=True)
     def serialize(self):
         return {
-            "seller_user" : self.user.id,
+            "seller_user" : self.user.username,
             "profile_id" : self.profile,
-            "customer_user" : self.person2_id,
+            "customer_user id" : self.person2_id,
             "is_accepted": self.is_accepted,
             "is_active" : self.is_active,
             "accept_time" : self.accept_time,
@@ -121,7 +122,7 @@ class Chat(models.Model):
     time = models.DateTimeField(null=True)
     def serialize(self):
         return {
-            "id" : self.person2_id,
+            "person2 username" : self.person2_username,
             "unread_cnt" : self.unread_cnt
         }
 class Message (models.Model):

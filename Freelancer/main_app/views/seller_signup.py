@@ -26,7 +26,7 @@ def seller_signup (request) :
     if cnt != 13:
         return Response({ "error" : "some values are empty" })
     username = data['username']
-    if (len(username>50)):
+    if len(username)>50:
          return Response({ "error" : "username max length is 50" })
     email = data['email']
     password = data['password']

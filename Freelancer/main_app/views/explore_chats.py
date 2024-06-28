@@ -7,7 +7,7 @@ from ..models import Message , Chat
 @permission_classes([IsAuthenticated])
 def explore_chats(request):
     user1 = request.user
-    chats = Chat.objects.filter( user = user1 ).order_by(-'time')
+    chats = Chat.objects.filter( user = user1 ).order_by('-time')
     unread_chats = 0 
     
     serialized_chats = []

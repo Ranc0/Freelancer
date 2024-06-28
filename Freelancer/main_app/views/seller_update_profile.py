@@ -4,18 +4,21 @@ from rest_framework.response import Response
 from ..models import  Seller_Account , Profile 
 
 
-@api_view(['PUT'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def seller_update_profile (request, id1, id2) : 
+def seller_update_profile (request, id2) : 
     data = request.data
-    if not Seller_Account.objects.filter(username = id1).exists():
+    seller_user = request.user
+    seller_account = Seller_Account.objects.filter(username = seller_user)
+    if not seller_account.exists():
         return Response({ "error" : "no seller with this id" })
-    seller_account = Seller_Account.objects.get(username=id1) 
-    if not Profile.objects.filter(profile_seller_id = id2).filter(seller_account = seller_account.pk).exists():
-        return Response({ "error" : "no profile with this id" })
+    
+    seller_account = seller_account[0]
+    profile = Profile.objects.filter(profile_seller_id = id2).filter(seller_account = seller_account.pk)
+    if not profile.exists():
+        return Response({ "error" : "no profile with this id for this seller" })
 
-
-    profile = Profile.objects.filter(profile_seller_id = id2).get(seller_account = seller_account.pk)
+    profile = profile[0]
 
     info = profile.serialize()
     for i,j in data.items() :

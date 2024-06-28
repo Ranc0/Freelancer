@@ -2,14 +2,12 @@ from rest_framework.decorators import api_view ,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ..models import Deal_With 
-from django.db.models import Q
 import datetime
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def accept_service (requset , customer_id , profile_id):
-    service_object = Deal_With.objects.filter(Q(user = requset.user) and Q(person2_id = customer_id) 
-                                              and Q(profile = profile_id))
-    if (not service_object) :
+    service_object = Deal_With.objects.filter(user = requset.user ).filter(person2_id = customer_id).filter(profile = profile_id)
+    if not service_object.exists() :
         return Response ({"error" : "such service doesn't exist"})
     service_object = service_object[0]
     service_object.is_accepted = True

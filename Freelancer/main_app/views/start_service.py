@@ -3,13 +3,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ..models import Deal_With , Seller_Account , Profile , Customer_Account 
 from django.contrib.auth.models import User
-from django.db.models import Q
+import datetime
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def start_service(request, id , id2):
+def start_service(request, username , id2):
     customer_user = request.user
-    seller_user = User.objects.filter(id = id)
+    seller_user = User.objects.filter(username = username)
     if not seller_user.exists():
         return Response({"error": "no user with this id"})
     
@@ -27,9 +27,22 @@ def start_service(request, id , id2):
     if (seller_profile.is_active==False):
           return Response({"error": "can't start a service with a profile that is not activated"})
     
-    exists = Deal_With.objects.filter(Q(User = seller_user) and Q(person2_id = customer_user.id))
-    if (exists) :
-          return Response({"error": "a request to this profile alreay exisits , you can either delete it or wait till accepted"})
+    serv = Deal_With.objects.filter(user = seller_user).filter(person2_id = customer_user.id).filter(profile=id2)
+    if serv.exists():
+          serv = serv[0]
+          if serv.is_active == 1:
+            return Response({"error": "a request to this profile alreay exisits , you can either delete it or wait till accepted"})
+          else:
+               serv.send_date = datetime.datetime.now().date()
+               serv.send_time = datetime.datetime.now().time()
+               serv.end_time = None
+               serv.accept_time = None
+               serv.is_accepted = 0
+               serv.is_active = 1
+               serv.save()
+               now = serv.serialize()
+               now.update({"error":"no error"})
+               return Response(now)
         
     service = Deal_With.objects.create(
         user = seller_user,

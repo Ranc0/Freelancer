@@ -5,15 +5,15 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 
-@api_view(['PUT'])
-def seller_update_account (request , id) : 
+@api_view(['POST'])
+def seller_update_account (request) : 
     data = request.data
-    if not Seller_Account.objects.filter(username = id).exists():
+    user = request.user
+    account = Seller_Account.objects.filter(username = user)
+    if not account.exists():
         return Response({ "error" : "no seller with this id" })
     
-    account =  Seller_Account.objects.get(username=id)
-    user = User.objects.get(id=id)
-
+    account = account[0]
     if check_password('the default password', user.password):
         return Response ({"error" : "incorrect password"})
             
