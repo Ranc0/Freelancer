@@ -1,7 +1,8 @@
 from rest_framework.decorators import api_view ,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from ..models import Message , Chat
+from ..models import Message , Chat , Seller_Account , Customer_Account
+from django.contrib.auth.models import User
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -16,6 +17,11 @@ def explore_chats(request):
        if serialized_chat['unread_cnt']:
            unread_chats += 1
        last_message = Message.objects.filter(chat = i).last()
+       user2 = User.objects.get(username = i.person2_username)
+       if Seller_Account.objects.filter(username = user2).exists():
+        img = Seller_Account.objects.get(username = user2).img
+       elif Customer_Account.objects.filter(username = user2).exists():
+        img = Customer_Account.objects.get(username = user2).img
 
        serialized_chat.update({ "last_message" : last_message.message })
        serialized_chat.update({ "username" : i.person2_username})
@@ -23,6 +29,7 @@ def explore_chats(request):
        serialized_chat.update({ "time" : last_message.time })
        serialized_chat.update({ "sender" : last_message.sender })
        serialized_chat.update({ "reciever" : last_message.reciever })
+       serialized_chat.update({ "img" : img })
        
        serialized_chats.append(serialized_chat)
     now = {}

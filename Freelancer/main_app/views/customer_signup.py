@@ -53,6 +53,9 @@ def customer_signup (request) :
                     phone_number= data['phone_number'],
                     member_since = date.today(),
                 )
+                    if dic['img']:
+                        customer_account.img = data['img']
+                    customer_account.save()
                     now = customer_account.serialize()
                     now.update({'id': user.id})
                     now.update({'error': "no error found"})

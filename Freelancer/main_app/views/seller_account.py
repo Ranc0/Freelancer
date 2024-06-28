@@ -23,6 +23,7 @@ def seller_account (request):
                     "rate" : pro.rate,
                 })
             now = info.serialize()
+            now.update({"img" : info.img})
             profiles_sorted = sorted(seller_profiles, key=lambda x: x["rate"], reverse=True)
             now.update({ "profiles" : profiles_sorted })
             return Response(now)

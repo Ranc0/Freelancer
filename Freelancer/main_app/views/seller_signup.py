@@ -56,6 +56,9 @@ def seller_signup (request) :
                     al_haram= data['al_haram'],
                     id_picture= data['id_picture']
                     )
+                    if dic['img']:
+                        seller_account.img = data['img']
+                    seller_account.save()
                     now = seller_account.serialize()
                     now.update({'id': user.id})
                     now.update({'error': "no error found"})

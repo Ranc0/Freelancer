@@ -44,22 +44,19 @@ def search(request):
         for profile in info:
             seller_obj = Seller_Account.objects.get(id =profile.seller_account.pk)
             username = seller_obj.username.username
-
-            if profile.rate_cnt:
-                rate = profile.rate_sum / profile.rate_cnt
-            else:
-                rate = 0
+            img = seller_obj.img
             profiles.append({
                 "username": username,
                 "first_name": seller_obj.first_name,
                 "second_name": seller_obj.second_name,
                 "profile_id": profile.profile_seller_id,
+                "img" : img,
                 "language" : profile.language,
                 "work_group" : profile.work_group,
                 "bio" : profile.bio,
                 "provided_services": profile.provided_services,
                 "member_since" : profile.member_since,
-                "rate" : rate,
+                "rate" : profile.rate,
                 "is_active" : profile.is_active
             })
         dectionary = {'profiles': profiles}

@@ -16,6 +16,7 @@ def customer_account(request):
             now = customer.serialize()
             now.update({ "id" : customer.username_id })
             now.update({ "username" : user.username })
+            now.update({ "img" : customer.img })
             return Response(now)
         else:
             return Response({ "error" : "no customer with this username" })

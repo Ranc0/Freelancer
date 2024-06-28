@@ -10,7 +10,6 @@ from .views import seller_update_account
 from .views import seller_signin
 from .views import seller_update_profile
 from .views import seller_create_profile
-from .views import seller_delete_profile
 from .views import customer_signup
 from .views import customer_signin
 from .views import customer_update_account
@@ -45,7 +44,6 @@ urlpatterns = [
     path('signin/seller', seller_signin),
     path('update/seller/profile/<int:id2>', seller_update_profile),
     path('create/seller/profile', seller_create_profile),
-    path('delete/seller/<int:id1>/profile/<int:id2>', seller_delete_profile),
     path('signup/customer', customer_signup),
     path('signin/customer', customer_signin),
     path('update/customer', customer_update_account),

@@ -16,6 +16,7 @@ def seller_profile (request , id2):
         seller_profile = Profile.objects.filter(profile_seller_id = id2).filter(seller_account = seller_account.id)
         if not seller_profile.exists():
                 return Response({"error":"there is no profile with this id for this seller"})
+        seller_profile = seller_profile[0]
 
         info = {}
 
@@ -23,11 +24,9 @@ def seller_profile (request , id2):
         info.update({"first_name": seller_account.first_name})
         info.update({"second_name": seller_account.second_name})
         info.update({"profile_id":id2})
-        if seller_profile.rate_cnt:
-                rate = seller_profile.rate_sum  /  seller_profile.rate_cnt
-        else:
-                rate = 0
-        info.update({"rate":rate})
+        
+        info.update({"rate":seller_profile.rate})
         info.update(seller_profile.serialize())
+        info.update({"img": seller_account.img})
         return Response(info)
 
