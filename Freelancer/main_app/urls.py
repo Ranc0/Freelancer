@@ -26,6 +26,8 @@ from .views import active_services
 from .views import accept_service
 from .views import delete_service
 from .views import explore_reviews
+from .views import pause_profile
+from .views import resume_profile
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -60,6 +62,7 @@ urlpatterns = [
     path('service/active', active_services),
     path('service/accept/<int:customer_id>/<int:profile_id>', accept_service),
     path('service/delete/<str:customer_username>/<str:seller_username>/<int:profile_id>', delete_service),
-   
+    path('pause/seller/profile/<int:id1>', pause_profile),
+    path('resume/seller/profile/<int:id1>', resume_profile)
 
 ]
