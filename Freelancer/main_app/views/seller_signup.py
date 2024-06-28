@@ -10,7 +10,7 @@ def seller_signup (request) :
     data = request.data
     cnt = 0
     arr = ['username','email','password','password2','first_name','second_name',
-    'country','bdate','phone_number','syriatel_cash','usdt','al_haram','id_picture']
+    'country','bdate','phone_number','syriatel_cash','usdt','al_haram','id_picture','img']
     dic = {}
     for i in arr:
         dic[i] = 0
@@ -23,7 +23,7 @@ def seller_signup (request) :
         if j > 1:
             return Response({ "error" : "some values are duplicate" })
         cnt += j
-    if cnt != 13:
+    if cnt != 14:
         return Response({ "error" : "some values are empty" })
     username = data['username']
     if len(username)>50:
@@ -56,7 +56,7 @@ def seller_signup (request) :
                     al_haram= data['al_haram'],
                     id_picture= data['id_picture']
                     )
-                    if dic['img']:
+                    if data['img'] != '':
                         seller_account.img = data['img']
                     seller_account.save()
                     now = seller_account.serialize()

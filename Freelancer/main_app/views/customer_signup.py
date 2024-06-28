@@ -10,7 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 def customer_signup (request) : 
     data = request.data
     arr = ['username','email','password','password2','first_name','second_name',
-    'country','bdate','phone_number']
+    'country','bdate','phone_number','img']
 
     cnt = 0
     dic = {}
@@ -25,7 +25,7 @@ def customer_signup (request) :
         if j > 1:
             return Response({ "error" : i})
         cnt += j
-    if cnt != 9:
+    if cnt < 10:
         return Response({ "error" : "some values are empty" })
     username = data['username']
     if len(username)>50:
@@ -53,7 +53,7 @@ def customer_signup (request) :
                     phone_number= data['phone_number'],
                     member_since = date.today(),
                 )
-                    if dic['img']:
+                    if data['img'] != '':
                         customer_account.img = data['img']
                     customer_account.save()
                     now = customer_account.serialize()
