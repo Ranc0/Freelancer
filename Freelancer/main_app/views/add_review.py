@@ -4,7 +4,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ..models import Deal_With , Review , Seller_Account , Profile , Customer_Account
 from django.contrib.auth.models import User
-import datetime
 from django.utils import timezone
 
 @api_view(['POST'])
