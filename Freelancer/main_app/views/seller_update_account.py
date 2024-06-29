@@ -1,6 +1,7 @@
 from .. import validators as v
 from ..models import Seller_Account
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view ,permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 @api_view(['PUT'])
@@ -20,7 +21,7 @@ def seller_update_account (request) :
 
     for i,j in data.items() :
         if i == "username":
-            continue
+            return Response({"error":"you can't change your username , changes not saved"})
         if (i=="id") :
             return Response ({"error" : "you can't change account id , changes not saved"})
         if (i=='password'):
