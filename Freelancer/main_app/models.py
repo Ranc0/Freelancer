@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, auth
+from .default_for_img import *
 
 class Seller_Account(models.Model):
     username = models.ForeignKey(User , null = True , on_delete=models.CASCADE)
@@ -13,7 +14,8 @@ class Seller_Account(models.Model):
     syriatel_cash = models.BooleanField(default=False)
     usdt = models.BooleanField(default=False)
     al_haram = models.BooleanField(default=False)
-    id_picture = models.CharField(max_length=255,null=True)
+    id_picture = models.TextField(max_length=900000, blank=True, default = default_img)
+    img = models.TextField(max_length=900000, blank=True, default = default_img )
     def serialize(self): 
         return {
             #"id" : self.id,
@@ -27,6 +29,7 @@ class Seller_Account(models.Model):
             "usdt": self.usdt,
             "al_haram": self.al_haram,
             "id_picture": self.id_picture,
+            "img" : self.img
         }
     
 class Profile(models.Model):
@@ -36,7 +39,10 @@ class Profile(models.Model):
     bio = models.TextField(null=True)
     provided_services = models.IntegerField(default=0)
     member_since = models.DateTimeField(auto_now=True)
+    rate_sum = models.FloatField(default=0.0)
+    rate_cnt = models.FloatField(default=0.0)
     rate = models.FloatField(default=0.0)
+    is_active = models.BooleanField(default=True)
     seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE, default = 1,related_name='profile' )
     def serialize(self):
         return {
@@ -44,7 +50,10 @@ class Profile(models.Model):
             "work_group": self.work_group,
             "bio": self.bio,
             "provided_services": self.provided_services,
-            "member_since": self.member_since
+            "member_since": self.member_since,
+            "is_active" : self.is_active 
+            
+
         }
     
     #collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
@@ -60,6 +69,7 @@ class Customer_Account(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=10)
     member_since = models.DateField(auto_now_add=True)
+    img = models.TextField(max_length=900000, blank=True, default = default_img )
     def serialize(self): 
         return {
             #"id" : self.id,
@@ -70,44 +80,74 @@ class Customer_Account(models.Model):
             "email": self.email,
             "phone_number": self.phone_number,
             "member_since": self.member_since,
+            "img" : self.img
         }
     
 class Deal_With(models.Model):
-    seller_account = models.ForeignKey(Seller_Account, on_delete=models.CASCADE, default = 1,related_name='deal_with_customer')
-    seller_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, default = 1,related_name='deal_with_customer')
-    customer_account = models.ForeignKey(Customer_Account, on_delete=models.CASCADE, default = 1,related_name='deal_with_seller')
-    created_at = models.DateField(auto_now_add=True)
-    start_service = models.IntegerField(default=0)
-    end_service = models.IntegerField(default=0)
-    rating = models.IntegerField(default=0)
-    comment = models.TextField(null=True)
-    def serialize(self): 
+    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)
+    profile = models.IntegerField(null=True)
+    person2_id = models.CharField(max_length=50 , null=True)
+    send_date = models.DateField(auto_now_add=True)
+    send_time = models.TimeField(auto_now_add = True)
+    is_accepted = models.IntegerField(default=0)
+    is_active = models.IntegerField(default=1)
+    accept_time = models.DateField(null=True)
+    end_time = models.DateTimeField(null=True)
+    def serialize(self):
         return {
-            "id" : self.id,
-            "seller_account": self.seller_account,
-            "seller_profile": self.seller_profile,
-            "customer_account": self.customer_account,
-            "start_service": self.start_service,
-            "end_service": self.end_service,
-            "rating": self.rating,
-            "comment": self.comment,
+            "seller_user" : self.user.username,
+            "profile_id" : self.profile,
+            "customer_user id" : self.person2_id,
+            "is_accepted": self.is_accepted,
+            "is_active" : self.is_active,
+            "accept_time" : self.accept_time,
+            "end_time" : self.end_time,
+        }
+    
+class Review(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)
+    profile = models.IntegerField(null=True)
+    person2_id = models.CharField(max_length=50 , null=True)
+    rate = models.IntegerField(default=0)
+    comment = models.TextField(null=True)
+    def serialize(self):
+        return {
+            "review_id" : self.id,
+            "profile_id" : self.profile,
+            "customer_id" : self.person2_id,
+            "rate" : self.rate,
+            "comment" : self.comment
+        }
+
+
+class Chat(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)   
+    person2_username = models.CharField(max_length=50 , null=True)
+    unread_cnt = models.IntegerField(default=0)
+    time = models.DateTimeField(null=True)
+    def serialize(self):
+        return {
+            "person2 username" : self.person2_username,
+            "unread_cnt" : self.unread_cnt,
         }
     
 class Message (models.Model):
-    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True)
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE , null = True)
     message = models.TextField()
-    sender = models.CharField(max_length=50)
-    reciever = models.CharField(max_length=50)
+    image_message = models.TextField(max_length=900000, blank=True, null = True )
+    sender = models.CharField(max_length=50 , null=True)
+    reciever = models.CharField(max_length=50 , null = True) 
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
 
     def serialize(self): 
         return {
             "message": self.message,
+            "image_message" : self.image_message,
+            "date" : self.date,
+            "time": self.time,
             "sender" : self.sender,
             "reciever" : self.reciever,
-            "date" : self.date,
-            "time": self.time
         }
 
 

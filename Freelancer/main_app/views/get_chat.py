@@ -1,22 +1,31 @@
-from django.shortcuts import render
-from django.http import JsonResponse
 from rest_framework.decorators import api_view ,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from datetime import date
-from ..models import Message
-from django.contrib.auth.models import User, auth
-from django.db.models import Q
+from ..models import Message , Chat , Seller_Account , Customer_Account
+from django.contrib.auth.models import User
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_chat(request , id ):
+def get_chat(request , username ):
     user1 = request.user
-    messages = Message.objects.filter(user = user1 and  Q(sender=id) | Q(reciever=id)) 
+    chat = Chat.objects.filter( user = user1 ).filter( person2_username = username )
     serialized_messages = []
+    if (not chat):
+        return Response ({"messages":serialized_messages})
+    chat = chat[0]
+    chat.unread_cnt = 0
+    chat.save()
+    messages = Message.objects.filter(chat = chat)
     for i in messages:
        serialized_messages.append(i.serialize())
     now = {}
     now.update({"messages":serialized_messages})
+    username = User.objects.get(username = username)
+    if Seller_Account.objects.filter(username = username).exists():
+        img = Seller_Account.objects.get(username = username).img
+    elif Customer_Account.objects.filter(username = username).exists():
+        img = Customer_Account.objects.get(username = username).img
+    now.update({"img":img})
 
     return Response (now)
     

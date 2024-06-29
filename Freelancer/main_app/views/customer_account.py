@@ -1,20 +1,23 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from ..models import Profile
-from ..models import Seller_Account
+
 from ..models import Customer_Account
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view ,permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User
 
 @api_view(['GET'])
-def customer_account(request,id):
+@permission_classes([IsAuthenticated])
+def customer_account(request):
+    user = request.user
     if request.method == 'GET':
-        if Customer_Account.objects.filter(username = id).exists():
-            info = Customer_Account.objects.get(username = id)
-            now = info.serialize()
-            now.update({ "id" : info.username_id })
+        customer = Customer_Account.objects.filter(username = user)
+        if customer.exists():
+            customer = customer[0]
+            now = customer.serialize()
+            now.update({ "id" : customer.username_id })
+            now.update({ "username" : user.username })
+            now.update({ "img" : customer.img })
             return Response(now)
         else:
-            return Response({ "error" : "no customer with this id" })
+            return Response({ "error" : "no customer with this username" })
     

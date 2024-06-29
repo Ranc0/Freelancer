@@ -1,12 +1,8 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from ..models import Profile
 from ..models import Seller_Account
-from ..models import Customer_Account
 from .. import validators as v
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST'])
@@ -14,7 +10,7 @@ def seller_signup (request) :
     data = request.data
     cnt = 0
     arr = ['username','email','password','password2','first_name','second_name',
-    'country','bdate','phone_number','syriatel_cash','usdt','al_haram','id_picture']
+    'country','bdate','phone_number','syriatel_cash','usdt','al_haram','id_picture','img']
     dic = {}
     for i in arr:
         dic[i] = 0
@@ -23,22 +19,22 @@ def seller_signup (request) :
         if i in arr:
             dic[i] += 1
     
-
-
     for i,j in dic.items():
         if j > 1:
             return Response({ "error" : "some values are duplicate" })
         cnt += j
-    if cnt != 13:
+    if cnt != 14:
         return Response({ "error" : "some values are empty" })
     username = data['username']
+    if len(username)>50:
+         return Response({ "error" : "username max length is 50" })
     email = data['email']
     password = data['password']
     password2 = data['password2']
     
     if (password==password2):
-        if (User.objects.filter(email=email).exists()):
-            now = {'error': "email is already used"}
+        if (Seller_Account.objects.filter(email=email).exists()):
+            now = {'error': "this email is already used by a seller "}
             return Response (now)
         elif User.objects.filter(username=username).exists():
             now = {'error': "username already used"}
@@ -60,9 +56,13 @@ def seller_signup (request) :
                     al_haram= data['al_haram'],
                     id_picture= data['id_picture']
                     )
+                    if data['img'] != '':
+                        seller_account.img = data['img']
+                    seller_account.save()
                     now = seller_account.serialize()
                     now.update({'id': user.id})
                     now.update({'error': "no error found"})
+                    now.update({'username': user.username})
                     user.save()
                     refresh = RefreshToken.for_user(user)
                     now.update({'refresh': str(refresh)})

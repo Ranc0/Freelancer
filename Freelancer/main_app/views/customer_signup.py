@@ -1,20 +1,16 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from ..models import Profile
-from ..models import Seller_Account
 from ..models import Customer_Account
 from .. import validators as v
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from datetime import date
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST'])
 def customer_signup (request) : 
     data = request.data
     arr = ['username','email','password','password2','first_name','second_name',
-    'country','bdate','phone_number']
+    'country','bdate','phone_number','img']
 
     cnt = 0
     dic = {}
@@ -29,15 +25,17 @@ def customer_signup (request) :
         if j > 1:
             return Response({ "error" : i})
         cnt += j
-    if cnt != 9:
+    if cnt < 10:
         return Response({ "error" : "some values are empty" })
     username = data['username']
+    if len(username)>50:
+         return Response({ "error" : "username max length is 50" })
     email = data['email']
     password = data['password']
     password2 = data['password2']
     if (password==password2):
-        if (User.objects.filter(email=email).exists()):
-            now = {'error': "email is already used"}
+        if (Customer_Account.objects.filter(email=email).exists()):
+            now = {'error': "email is already used by another customer"}
             return Response (now)
         elif User.objects.filter(username=username).exists():
             now = {'error': "username already used"}
@@ -55,9 +53,13 @@ def customer_signup (request) :
                     phone_number= data['phone_number'],
                     member_since = date.today(),
                 )
+                    if data['img'] != '':
+                        customer_account.img = data['img']
+                    customer_account.save()
                     now = customer_account.serialize()
                     now.update({'id': user.id})
                     now.update({'error': "no error found"})
+                    now.update({'username': user.username})
                     user.save()
                     refresh = RefreshToken.for_user(user)
                     now.update({'refresh': str(refresh)})

@@ -1,31 +1,23 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from ..models import Profile
 from ..models import Seller_Account
 from ..models import Customer_Account
 from .. import validators as v
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view ,permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.contrib.auth.models import User, auth
-from django.contrib.auth.hashers import check_password
-
+from django.contrib.auth import authenticate
 @api_view(['PUT'])
-def customer_update_account (request , id) : 
+def customer_update_account (request) : 
     data = request.data
-    if not Customer_Account.objects.filter(username = id).exists():
-        return Response({ "error" : "no customer with this id" })
+    user = request.user
+    user = authenticate(username = user.username, password=data['password'])
+    if not user:
+        return Response({ "error" : "incorrect password, or user not found" })
     
-    account =  Customer_Account.objects.get(username=id)
-    user = User.objects.get(id=id)
-    
-    if check_password('the default password', user.password):
-        return Response ({"error" : "incorrect password"})
-    
-    # if (len(data["email"])==0 or len(data["first_name"])==0 or
-    #     len(data["second_name"])==0 or len(data["phone_number"])==0):
-    #      return Response ({"error" : "some values can't be empty"})
-        
+    account =  Customer_Account.objects.filter(username=user)
+    if not account.exists():
+        return Response({ "error" : "no customer with this username" })
 
+    account = account[0]
     info = account.serialize()
     for i,j in data.items() :
         if i == "username":

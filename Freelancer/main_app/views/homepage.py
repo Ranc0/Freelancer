@@ -1,26 +1,31 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from ..models import Profile
-from ..models import Seller_Account
-from ..models import Customer_Account
+from ..models import Profile ,Seller_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
         
 @api_view(['GET'])
 def homepage(request):
     if request.method == 'GET':
-        info = Profile.objects.all().order_by('-rate')
+        info = Profile.objects.filter(is_active = True)
         profiles = []
         for profile in info:
+            seller_obj = Seller_Account.objects.get(id = profile.seller_account.pk)
+            username = seller_obj.username.username
+            img = seller_obj.img
+
             profiles.append({
                 "profile_id": profile.profile_seller_id,
-                "account_id": profile.seller_account.pk,
+                "username": username,
+                "first_name": seller_obj.first_name,
+                "second_name": seller_obj.second_name,
+                "img" : img,
                 "language" : profile.language,
                 "work_group" : profile.work_group,
                 "bio" : profile.bio,
                 "provided_services": profile.provided_services,
                 "member_since" : profile.member_since,
-                "rate" : profile.rate,
+                "rate" : profile.rate ,
+                "is_active" : profile.is_active
             })
-        dectionary = {'profiles': profiles}
+        profiles_sorted = sorted(profiles, key=lambda x: x["rate"], reverse=True)
+        dectionary = {'profiles': profiles_sorted}
         return Response(dectionary)
