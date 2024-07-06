@@ -45,9 +45,9 @@ def index (request) :
             "description" : "unbans the user with this username , returns ((result)) as well"
         },
         {
-            "endpoint" : 'get_id/username',
+            "endpoint" : 'staff/get_id_pic/username',
             "method" : 'PUT',
-            "description" : "get the id picture for a seller with seller account and profiles , returns ((result)) as well"
+            "description" : "get the id picture for a seller with this username , returns ((result)) as well"
         },
     ]
     return Response (routes)

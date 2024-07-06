@@ -46,6 +46,7 @@ def add_review(request , username1 , id2 ):
     for i, j in data.items():
          if i == 'rate' :
               j = int(j)
+              j = min(j,5)
               rate += j 
               found_rate=1
           
