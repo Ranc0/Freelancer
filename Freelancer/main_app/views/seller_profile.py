@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from ..models import Seller_Account , Profile 
 
 @api_view(['GET'])    
-@permission_classes([IsAuthenticated])
 def seller_profile (request , id2):
     
         user = request.user

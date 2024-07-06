@@ -35,7 +35,7 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('',index, name='index'),
     path('account/seller' , seller_account , name='seller_account'),
-    path('account/seller/profile/<int:id2>' ,seller_profile , name='seller_profile'),
+    path('account/seller/profile/<str:username>/<int:id2>' ,seller_profile , name='seller_profile'),
     path('account/customer', customer_account),
     path('homepage', homepage),
     path('signup/seller', seller_signup),
