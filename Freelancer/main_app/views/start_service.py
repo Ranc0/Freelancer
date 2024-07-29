@@ -15,6 +15,8 @@ def start_service(request, username , id2):
     
     if (not Customer_Account.objects.filter(username = request.user)):
          return Response({"error": " you must be a customer to start a service"})
+    if (not Seller_Account.objects.filter(username = username)):
+         return Response({"error": " no seller with this username"})
     
     seller_user = seller_user[0]
     seller_account = Seller_Account.objects.get(username = seller_user)
@@ -27,27 +29,17 @@ def start_service(request, username , id2):
     if (seller_profile.is_active==False):
           return Response({"error": "can't start a service with a profile that is not activated"})
     
-    serv = Deal_With.objects.filter(user = seller_user).filter(person2_id = customer_user.id).filter(profile=id2)
+    serv = Deal_With.objects.filter(user = seller_user).filter(person2_id = customer_user.username).filter(profile=id2)
     if serv.exists():
-          serv = serv[0]
-          if serv.is_active == 1:
-            return Response({"error": "a request to this profile alreay exisits , you can either delete it or wait till accepted"})
-          else:
-               serv.send_date = datetime.datetime.now().date()
-               serv.send_time = datetime.datetime.now().time()
-               serv.end_time = None
-               serv.accept_time = None
-               serv.is_accepted = 0
-               serv.is_active = 1
-               serv.save()
-               now = serv.serialize()
-               now.update({"error":"no error"})
-               return Response(now)
+          serv = serv.last
+          if serv.is_accepted == 0:
+            return Response({"error": "a request to this profile already exisits , you can either delete it or wait till accepted"})
+          
         
     service = Deal_With.objects.create(
         user = seller_user,
         profile = seller_profile.profile_seller_id,
-        person2_id = customer_user.id,
+        person2_id = customer_user.username,
     )
     now = service.serialize()
     now.update({"error":"no error"})

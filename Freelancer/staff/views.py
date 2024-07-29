@@ -17,7 +17,7 @@ def index (request) :
         {
             "endpoint" : 'staff/check_service/customer_username/seller_username/profile_id',
             "method" : 'GET',
-            "description" : "returns ((result)) which is a message answering if there is a service between these two persons"
+            "description" : "returns ((result)) which is a message answering if there is a service between these two persons , and ((state)) which is either active or finished"
         },
         {
             "endpoint" : 'staff/get_chat/username1/username2',
@@ -45,9 +45,9 @@ def index (request) :
             "description" : "unbans the user with this username , returns ((result)) as well"
         },
         {
-            "endpoint" : 'staff/get_id_pic/username',
+            "endpoint" : 'staff/get_seller_info/username',
             "method" : 'PUT',
-            "description" : "get the id picture for a seller with this username , returns ((result)) as well"
+            "description" : "get the basic info of a seller like (first_name , last_name , phone_number , email , img , id_picture , username)"
         },
     ]
     return Response (routes)
@@ -111,8 +111,13 @@ def check_service(request , customer_username , seller_username , profile_id ):
         res = "YES ! there is a service between this profile and this customer"
     else :
          res = "No ! there is no service between this profile and this customer"
-    
-    return Response({"result": res})
+    obj = obj.last
+    state=""
+    if (obj.is_active==1) :
+        state = "active"
+    else :
+        state = "finished"
+    return Response({"result": res , "state": state})
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
@@ -199,30 +204,23 @@ def unban_user(request , username ):
 
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
-def get_id_pic(request , username):
+def get_seller_info(request , username):
     user = User.objects.filter(username = username)
     user = user[0]
     seller = Seller_Account.objects.filter(username = user)
     if not seller.exists():
         return Response({"error":"there is no such seller"})
     info = seller[0]
-    seller_profiles_query_set = Profile.objects.filter(seller_account = info.id)
-    seller_profiles = []
-    for pro in seller_profiles_query_set:
-        seller_profiles.append({
-                "profile_id": pro.profile_seller_id,
-                "language" : pro.language,
-                "work_group" : pro.work_group,
-                "bio" : pro.bio,
-                "provided_services": pro.provided_services,
-                "member_since" : pro.member_since,
-                "rate" : pro.rate,
-            })
+    
     now = info.serialize()
     now.update({"img" : info.img})
-    now.update({"id picture" : info.id_picture})
-    profiles_sorted = sorted(seller_profiles, key=lambda x: x["rate"], reverse=True)
-    now.update({ "profiles" : profiles_sorted })
+    now.update({"id_picture" : info.id_picture})
+    now.update({"first_name" : info.first_name})
+    now.update({"last_name" : info.second_name})
+    now.update({"username" : username})
+    now.update({"email" : info.email})
+    now.update({"phone_number" : info.phone_number})
+   
     return Response(now)
 
 

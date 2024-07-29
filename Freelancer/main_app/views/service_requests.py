@@ -12,7 +12,7 @@ def service_requests (request):
     serialized_requests= []
     for i in requests :
         profile_object = Profile.objects.get(id = i.profile)
-        customer_object = User.objects.get(id = i.person2_id)
+        customer_object = User.objects.get(username = i.person2_id)
         service_id = i.id
         workgroup = profile_object.work_group
         customer_username = customer_object.username

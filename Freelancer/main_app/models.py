@@ -97,7 +97,7 @@ class Deal_With(models.Model):
         return {
             "seller_user" : self.user.username,
             "profile_id" : self.profile,
-            "customer_user id" : self.person2_id,
+            "customer_user_username" : self.person2_id,
             "is_accepted": self.is_accepted,
             "is_active" : self.is_active,
             "accept_time" : self.accept_time,
