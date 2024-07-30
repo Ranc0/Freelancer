@@ -5,13 +5,14 @@ from rest_framework.decorators import api_view ,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def customer_update_account (request) : 
     data = request.data
     user = request.user
-    user = authenticate(username = user.username, password=data['password'])
-    if not user:
+    user1 = authenticate(username = user.username, password=data['password'])
+    if not user1:
         return Response({ "error" : "incorrect password, or user not found" })
     
     account =  Customer_Account.objects.filter(username=user)
@@ -31,7 +32,7 @@ def customer_update_account (request) :
             continue
         elif (i=='new_password'):
             if (v.passwordChecker(j)):
-                setattr(user , 'password' , j)
+                user.set_password(j)
                 continue
             else :
                 return Response ({"error" : "new password is not valid , length should be between 6 and 20"})

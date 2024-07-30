@@ -12,6 +12,6 @@ def customer_notifications(request):
     info = []
     for deal in deals:
         info.append(deal.serialize())
-    now = {}
-    now.update({"notifications":info})
-    return Response(now)
+    info = sorted(info, key=lambda x: x["accept_time"], reverse=True)
+    
+    return Response(info)

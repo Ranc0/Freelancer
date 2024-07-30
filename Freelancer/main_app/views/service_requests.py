@@ -3,12 +3,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from ..models import Deal_With , Profile 
 from django.contrib.auth.models import User
-from django.db.models import Q
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def service_requests (request):
-    requests = Deal_With.objects.filter(user = request.user and Q(is_accepted = False) )
+    requests = Deal_With.objects.filter(user = request.user ).filter(is_accepted = 0)
     serialized_requests= []
     for i in requests :
         profile_object = Profile.objects.get(id = i.profile)

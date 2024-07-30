@@ -19,6 +19,7 @@ class Seller_Account(models.Model):
     def serialize(self): 
         return {
             #"id" : self.id,
+            "seller_username" : self.username.username,
             "first_name": self.first_name,
             "second_name": self.second_name,
             "country": self.country,
@@ -95,9 +96,9 @@ class Deal_With(models.Model):
     end_time = models.DateTimeField(null=True)
     def serialize(self):
         return {
-            "seller_user" : self.user.username,
+            "seller_username" : self.user.username,
             "profile_id" : self.profile,
-            "customer_user_username" : self.person2_id,
+            "customer_username" : self.person2_id,
             "is_accepted": self.is_accepted,
             "is_active" : self.is_active,
             "accept_time" : self.accept_time,
@@ -113,8 +114,9 @@ class Review(models.Model):
     def serialize(self):
         return {
             "review_id" : self.id,
+            "seller_username" : self.user.username ,
             "profile_id" : self.profile,
-            "customer_id" : self.person2_id,
+            "customer_username" : self.person2_id,
             "rate" : self.rate,
             "comment" : self.comment
         }
@@ -127,7 +129,7 @@ class Chat(models.Model):
     time = models.DateTimeField(null=True)
     def serialize(self):
         return {
-            "person2 username" : self.person2_username,
+            "person2_username" : self.person2_username,
             "unread_cnt" : self.unread_cnt,
         }
     

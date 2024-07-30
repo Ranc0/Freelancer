@@ -20,19 +20,13 @@ def seller_profile (request , username ,  id2):
                 return Response({"error":"there is no profile with this id for this seller"})
         seller_profile = seller_profile[0]
 
-        info = {}
-
-        info.update({"username": user.username})
-        info.update({"first_name": seller_account.first_name})
-        info.update({"last_name": seller_account.second_name})
+        info = seller_account.serialize()
         info.update({"profile_id":id2})
-        info.update({"country": seller_account.country})
         info.update({"workgroup": seller_profile.work_group})
         info.update({"bio": seller_profile.bio})
         info.update({"provided_services": seller_profile.provided_services})
         info.update({"member_since" : seller_profile.member_since})
         info.update({"is_active" : seller_profile.is_active})
         info.update({"rate":seller_profile.rate})
-        info.update({"img": seller_account.img})
         return Response(info)
 

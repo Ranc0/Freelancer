@@ -17,9 +17,9 @@ def index (request) :
         }
         ,
         {
-            "endpoint" : 'account/seller/profile/profile_id',
+            "endpoint" : 'account/seller/profile/username/profile_id',
             "method" : 'GET',
-            "description" : "returns the profile with (profile_id) of the seller account linked with sender seller"
+            "description" : "returns the profile with (profile_id) of the seller account with (username)"
         },
          {
             "endpoint" : 'homepage',
@@ -143,5 +143,10 @@ def index (request) :
             "method" : 'delete',
             "description" : " you - as a seller or customer - can delete a service requset if it's not accepted yet ,  ((access)) token should be included in the request header "
         },       
+        {
+            "endpoint" : "customer_notifications",
+            "method" : 'get',
+            "description" : " you - as a customer - can explore the accepted services "
+        },
     ]
     return Response(routes)
