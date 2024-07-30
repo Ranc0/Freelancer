@@ -20,6 +20,8 @@ def customer_update_account (request) :
 
     account = account[0]
     info = account.serialize()
+    arr = ['email','password','new_password','first_name','second_name',
+    'country','bdate','phone_number','img']
     for i,j in data.items() :
         if i == "username":
             return Response({"error":"you can't change your username , changes not saved"})
@@ -37,6 +39,7 @@ def customer_update_account (request) :
             if (v.emailChecker(j) and Seller_Account.objects.filter(email=j).count()==0):
                 info[i] = j
                 setattr(account , i , j)
+                user.email = j
                 continue
             else :
                 return Response ({"error" : "email not valid or used before"})
@@ -47,9 +50,11 @@ def customer_update_account (request) :
                 continue
             else :
                 return Response ({"error" : "not a Syrian number"})    
-            
-        info[i] = j
-        setattr(account , i , j)
+        if i in arr:
+            info[i] = j
+            setattr(account , i , j)
+        else:
+            return Response({"error" : "some values are invalid to update"})
     account.save()
     user.save()
 

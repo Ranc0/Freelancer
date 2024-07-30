@@ -15,9 +15,9 @@ def delete_service(requset , customer_username , seller_username , profile_id):
     service_object = Deal_With.objects.filter(user = seller_user).filter(person2_id = customer_user.username).filter(profile = profile_id)
     if (not service_object) :
         return Response ({"error" : "such service doesn't exist"})
-    if service_object.last.is_accepted==1 :
+    if service_object.last().is_accepted==1 :
         return Response ({"error" : "you can't delete a service request if it has been accepted"})
     
-    service_object = service_object.last
+    service_object = service_object.last()
     service_object.delete()
     return Response ({"error" : "service deleted, no error found"})

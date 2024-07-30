@@ -27,7 +27,7 @@ def add_review(request , username1 , id2 ):
     deal_with = Deal_With.objects.filter(user = seller_user).filter(person2_id = customer_user.username).filter(profile = id2)
     if not deal_with.exists():
          return Response({"error":"no service to rate"})
-    deal_with = deal_with.last
+    deal_with = deal_with.last()
 
     if deal_with.is_accepted == 0:
          return Response({"error" : "you can't rate someone who didn't accept your offer"})
@@ -55,7 +55,7 @@ def add_review(request , username1 , id2 ):
     if found_rate==0:
          return Response({"error":"rating must be added with at least 1 star"})
          
-    review_query = Review.objects.filter(user = seller_user).filter(person2_id = customer_user.id).filter(profile = id2)
+    review_query = Review.objects.filter(user = seller_user).filter(person2_id = customer_user.username).filter(profile = id2)
     if review_query.exists():
           review = review_query[0]
           old_rate = review.rate
@@ -71,7 +71,7 @@ def add_review(request , username1 , id2 ):
          review = Review.objects.create(
               user = seller_user,
               person2_id = customer_user.username,
-              profile = seller_profile.id,
+              profile = seller_profile.profile_seller_id,
               rate = rate,
               comment = comment
          )

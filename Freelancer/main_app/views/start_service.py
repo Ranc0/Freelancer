@@ -12,13 +12,13 @@ def start_service(request, username , id2):
     seller_user = User.objects.filter(username = username)
     if not seller_user.exists():
         return Response({"error": "no user with this id"})
+    seller_user = seller_user[0]
     
     if (not Customer_Account.objects.filter(username = request.user)):
          return Response({"error": " you must be a customer to start a service"})
-    if (not Seller_Account.objects.filter(username = username)):
+    if (not Seller_Account.objects.filter(username = seller_user)):
          return Response({"error": " no seller with this username"})
     
-    seller_user = seller_user[0]
     seller_account = Seller_Account.objects.get(username = seller_user)
     profile_query = Profile.objects.filter(seller_account = seller_account).filter(profile_seller_id=id2)
 
@@ -31,7 +31,7 @@ def start_service(request, username , id2):
     
     serv = Deal_With.objects.filter(user = seller_user).filter(person2_id = customer_user.username).filter(profile=id2)
     if serv.exists():
-          serv = serv.last
+          serv = serv.last()
           if serv.is_accepted == 0:
             return Response({"error": "a request to this profile already exisits , you can either delete it or wait till accepted"})
           

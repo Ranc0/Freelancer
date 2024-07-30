@@ -21,7 +21,7 @@ def end_service(request, username , id2):
     if not service.exists():
         return Response({"error":"there is no such service to end"})
     
-    service = service.last
+    service = service.last()
     if service.is_accepted == 0:
         return Response({"error":"accept the service before end it "})
     

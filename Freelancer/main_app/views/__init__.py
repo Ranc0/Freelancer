@@ -26,3 +26,4 @@ from .delete_service import *
 from .explore_reviews import *
 from .pause_profile import *
 from .resume_profile import *
+from .customer_notifications import *

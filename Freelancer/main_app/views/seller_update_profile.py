@@ -19,13 +19,17 @@ def seller_update_profile (request, id2) :
         return Response({ "error" : "no profile with this id for this seller" })
 
     profile = profile[0]
+    arr = ["bio" , "language"]
 
     info = profile.serialize()
     for i,j in data.items() :
         if (i=="id") :
             return Response ({"error" : "you can't change profile id , changes not saved"})
-        info[i] = j
-        setattr(profile , i , j)
+        if i in arr:
+            info[i] = j
+            setattr(profile , i , j)
+        else:
+            return Response({"error" : "some values are invalid to update"})
     profile.save()
 
     info.update({"error" : "no error found"})

@@ -18,6 +18,8 @@ def seller_update_account (request) :
     
     account = account[0]
     info = account.serialize()
+    arr = ['email','password','new_password','first_name','second_name',
+    'country','bdate','phone_number','syriatel_cash','usdt','al_haram','img']
 
     for i,j in data.items() :
         if i == "username":
@@ -28,7 +30,7 @@ def seller_update_account (request) :
             continue
         elif (i=='new_password'):
             if (v.passwordChecker(j)):
-                setattr(user , 'password' , j)
+                user.password = j
                 continue
             else :
                 return Response ({"error" : "new password is not valid , length should be between 6 and 20"})
@@ -36,6 +38,7 @@ def seller_update_account (request) :
             if (v.emailChecker(j) and Seller_Account.objects.filter(email=j).count()==0):
                 info[i] = j
                 setattr(account , i , j)
+                user.email = j
                 continue
             else :
                 return Response ({"error" : "email not valid or used before"})
@@ -47,8 +50,11 @@ def seller_update_account (request) :
             else :
                 return Response ({"error" : "not a Syrian number"})    
             
-        info[i] = j
-        setattr(account , i , j)
+        if i in arr:
+            info[i] = j
+            setattr(account , i , j)
+        else:
+            return Response({"error" : "some values are invalid to update"})
     account.save()
     user.save()
 

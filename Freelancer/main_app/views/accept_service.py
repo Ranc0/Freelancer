@@ -9,7 +9,7 @@ def accept_service (requset , customer_username , profile_id):
     service_object = Deal_With.objects.filter(user = requset.user ).filter(person2_id = customer_username).filter(profile = profile_id)
     if not service_object.exists() :
         return Response ({"error" : "such service doesn't exist"})
-    service_object = service_object.last
+    service_object = service_object.last()
     if service_object.is_active==0:
         return Response ({"error":"service already ended"})
     if service_object.is_accepted==1 :
