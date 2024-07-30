@@ -5,9 +5,12 @@ from rest_framework.response import Response
 from ..models import Seller_Account , Profile 
 
 @api_view(['GET'])    
-def seller_profile (request , id2):
+def seller_profile (request , username ,  id2):
     
-        user = request.user
+        user = User.objects.filter(username = username)
+        if (not user):
+                return Response ({ "error":"no seller user with this username"})
+        user = user[0]        
         seller_account = Seller_Account.objects.filter(username = user)
         if (not seller_account):
                 return Response ({ "error":"no seller user with this username"})
@@ -17,15 +20,13 @@ def seller_profile (request , id2):
                 return Response({"error":"there is no profile with this id for this seller"})
         seller_profile = seller_profile[0]
 
-        info = {}
-
-        info.update({"username": user.username})
-        info.update({"first_name": seller_account.first_name})
-        info.update({"second_name": seller_account.second_name})
+        info = seller_account.serialize()
         info.update({"profile_id":id2})
-        
+        info.update({"workgroup": seller_profile.work_group})
+        info.update({"bio": seller_profile.bio})
+        info.update({"provided_services": seller_profile.provided_services})
+        info.update({"member_since" : seller_profile.member_since})
+        info.update({"is_active" : seller_profile.is_active})
         info.update({"rate":seller_profile.rate})
-        info.update(seller_profile.serialize())
-        info.update({"img": seller_account.img})
         return Response(info)
 

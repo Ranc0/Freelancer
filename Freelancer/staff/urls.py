@@ -10,6 +10,6 @@ urlpatterns = [
     path('ban/<str:username>' ,views.ban_user),
     path('unban/<str:username>' ,views.unban_user),
     path('signin' ,views.sign_in),
-    path('get_id/<str:username>', views.get_id_pic)
+    path('get_seller_info/<str:username>', views.get_seller_info)
    
     ]

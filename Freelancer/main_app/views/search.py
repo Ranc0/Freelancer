@@ -48,7 +48,7 @@ def search(request):
             profiles.append({
                 "username": username,
                 "first_name": seller_obj.first_name,
-                "second_name": seller_obj.second_name,
+                "last_name": seller_obj.second_name,
                 "profile_id": profile.profile_seller_id,
                 "img" : img,
                 "language" : profile.language,

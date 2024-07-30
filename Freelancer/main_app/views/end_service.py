@@ -17,11 +17,11 @@ def end_service(request, username , id2):
          return Response({"error": " you must be a seller to end your services"})
     
     customer_user = customer_user[0]
-    service = Deal_With.objects.filter(user = seller_user).filter(person2_id = customer_user.id).filter(profile = id2)
+    service = Deal_With.objects.filter(user = seller_user).filter(person2_id = customer_user.username).filter(profile = id2)
     if not service.exists():
         return Response({"error":"there is no such service to end"})
     
-    service = service[0]
+    service = service.last()
     if service.is_accepted == 0:
         return Response({"error":"accept the service before end it "})
     

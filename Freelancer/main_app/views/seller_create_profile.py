@@ -27,6 +27,9 @@ def seller_create_profile (request):
         now= seller_profile.serialize()
         now.update({'id': seller_profile.profile_seller_id})
         now.update({"img":seller_account_obj.img})
+        now.update({'first_name': seller_account_obj.first_name})
+        now.update({'last_name': seller_account_obj.second_name})
+      
         now.update({'error': "no error found"})
         return Response (now)
     else:

@@ -21,4 +21,4 @@ def resume_profile (request , id1):
         return Response({"error" : "profile already worked"})
     profile.is_active = True
     profile.save()
-    return Response({"error" : "no errors, profile paused"})
+    return Response({"error" : "no errors, profile resumed"})
