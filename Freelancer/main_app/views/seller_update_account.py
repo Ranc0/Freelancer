@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def seller_update_account (request) : 
     data = request.data
     user = request.user
