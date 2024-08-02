@@ -91,7 +91,7 @@ def index (request) :
          {
             "endpoint" : "chat/send/target_username",
             "method" : 'post',
-            "description" : "you send a json file with the ((message))  ,  ((access)) token should be included in the request header "
+            "description" : "you send a json file with the ((message)) , and ((img)) if desired  ,  ((access)) token should be included in the request header "
         },
         {
             "endpoint" : "chat/target_username",
