@@ -10,7 +10,10 @@ from datetime import datetime
 def send_message(request , username):
     user1 = request.user
     data = request.data
-    
+    for i,j in data.items():
+         if i != "message" and i!="img":
+              return Response({"error": "unknown value sent"})
+        
     b = False
     text = ""
     for i,j in data.items():
