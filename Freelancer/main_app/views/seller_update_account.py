@@ -9,9 +9,10 @@ from django.contrib.auth import authenticate
 def seller_update_account (request) : 
     data = request.data
     user = request.user
-    user1 = authenticate(username = user.username, password=data['password'])
-    if not user1:
-        return Response ({"error" : "incorrect password, or user not found"})
+    if 'password' in data:
+        user1 = authenticate(username = user.username, password=data['password'])
+        if not user1:
+            return Response ({"error" : "incorrect password, or user not found"})
     
     account = Seller_Account.objects.filter(username = user)
     if not account.exists():
