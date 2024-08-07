@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from datetime import date
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def available_profiles (request):
      user = request.user
@@ -14,8 +14,11 @@ def available_profiles (request):
      arr = ["Interior Designer" ,"Designer" ,"Doctor" ,
                "IT Engineer" , "Architecture Engineer" ,"Lawyer" ,"Translator" ,"Teacher"]   
      already = Profile.objects.filter(seller_account_id = seller_account_obj.id) 
+     arr1 = []
+     for i in range(0,len(already)):
+          arr1.append(already[i].work_group)
      available = []
      for i in arr :
-          if i not in already:
+          if i not in arr1:
                available.append(i)
      return Response ({"result" : available})

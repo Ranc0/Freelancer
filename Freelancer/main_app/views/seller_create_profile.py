@@ -14,14 +14,15 @@ def seller_create_profile (request):
         seller_account_obj = Seller_Account.objects.get(username=user)   
         arr = ["Interior Designer" ,"Designer" ,"Doctor" ,
                "IT Engineer" , "Architecture Engineer" ,"Lawyer" ,"Translator" ,"Teacher"] 
-        desired_workgroup = data['workgroup']
+        desired_workgroup = data['work_group']
         if (desired_workgroup not in arr) :
             return Response({ "error" : "this workgroup is not available in our app yet" })
         
         already = Profile.objects.filter(seller_account_id = seller_account_obj.id)
+        arr = []
         for i in range(0,len(already)):
-            already[i] = already[i].work_group
-        if (desired_workgroup in already):
+            arr.append(already[i].work_group)
+        if (desired_workgroup in arr):
             return Response({ "error" : "you already have a profile for this workgroup" })
 
 
