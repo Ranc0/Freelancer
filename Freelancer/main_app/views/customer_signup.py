@@ -29,7 +29,9 @@ def customer_signup (request) :
         return Response({ "error" : "some values are empty" })
     username = data['username']
     if len(username)>50:
-         return Response({ "error" : "username max length is 50" })
+        return Response({ "error" : "username max length is 50" })
+    elif v.emailChecker(username)== 1:
+        return Response({ "error" : "username can't be in email format" })
     email = data['email']
     password = data['password']
     password2 = data['password2']
