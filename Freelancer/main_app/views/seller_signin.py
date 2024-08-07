@@ -28,7 +28,6 @@ def seller_signin (request) :
         
     seller_account = seller_account[0]
     now = seller_account.serialize()
-    now.update({ "id" : seller_account.username_id })
     now.update({ "error" : 'no error found'})
     now.update({'username': user.username})
     refresh = RefreshToken.for_user(user)

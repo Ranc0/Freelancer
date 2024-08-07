@@ -40,7 +40,6 @@ def customer_signin (request) :
         
         customer_account = customer_account[0]
         now = customer_account.serialize()
-        now.update({ "id" : customer_account.username_id })
         now.update({ "error" : "no error found"})
         now.update({'username': user.username})
         refresh = RefreshToken.for_user(user)

@@ -28,6 +28,8 @@ from .views import explore_reviews
 from .views import pause_profile
 from .views import resume_profile
 from .views import customer_notifications
+from .views import search_chat
+from .views import available_profiles
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -37,6 +39,7 @@ urlpatterns = [
     path('',index, name='index'),
     path('account/seller' , seller_account , name='seller_account'),
     path('account/seller/profile/<str:username>/<int:id2>' ,seller_profile , name='seller_profile'),
+    path('profiles/available', available_profiles),
     path('account/customer', customer_account),
     path('homepage', homepage),
     path('signup/seller', seller_signup),
@@ -53,6 +56,7 @@ urlpatterns = [
     path('chat/send/<str:username>', send_message),
     path('chat/<str:username>', get_chat),
     path('chats' , explore_chats),
+    path('chats/search/<str:username>' , search_chat),
     path('review/add/<str:username1>/<int:id2>', add_review),
     path('review/explore/<str:seller_username>/<int:profile_id>', explore_reviews),
     path('service/start/<str:username>/<int:id2>', start_service),
