@@ -2,8 +2,10 @@ from ..models import Customer_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 #from django.contrib.auth.models import User
+from .. import validators as v
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import User
 #from django.contrib.auth.hashers import check_password
 
 @api_view(['POST'])
@@ -12,8 +14,16 @@ def customer_signin (request) :
         if len(data['password']) == 0 or (len(data['username']) == 0) :
             return Response({ "error" : "some important values are not valid" })
         customer_account = None
-        user = authenticate(username=data['username'], password=data['password'])
+        
         #user = User.objects.filter(username = data['username'])
+        if v.emailChecker(data['username'])== 1:
+            user = User.objects.get(email = data['username'])
+            if not user:
+                 return Response ({"error" : "no such user as a customer , please sign up first"})
+            data['username'] = user.username
+            
+        user = authenticate(username=data['username'], password=data['password'])
+
         if (user) :
             customer_account =  Customer_Account.objects.filter(username = user)
             if (not customer_account.exists()):
@@ -30,7 +40,6 @@ def customer_signin (request) :
         
         customer_account = customer_account[0]
         now = customer_account.serialize()
-        now.update({ "id" : customer_account.username_id })
         now.update({ "error" : "no error found"})
         now.update({'username': user.username})
         refresh = RefreshToken.for_user(user)

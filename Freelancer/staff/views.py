@@ -215,6 +215,7 @@ def get_seller_info(request , username):
     now = info.serialize()
     now.update({"img" : info.img})
     now.update({"id_picture" : info.id_picture})
+    now.update({"id_picture2" : info.id_picture2})
     now.update({"first_name" : info.first_name})
     now.update({"last_name" : info.second_name})
     now.update({"username" : username})

@@ -11,7 +11,21 @@ def seller_create_profile (request):
     data = request.data
     user = request.user
     if Seller_Account.objects.filter(username = user).exists():
-        seller_account_obj = Seller_Account.objects.get(username=user)       
+        seller_account_obj = Seller_Account.objects.get(username=user)   
+        arr = ["Interior Designer" ,"Designer" ,"Doctor" ,
+               "IT Engineer" , "Architecture Engineer" ,"Lawyer" ,"Translator" ,"Teacher"] 
+        desired_workgroup = data['work_group']
+        if (desired_workgroup not in arr) :
+            return Response({ "error" : "this workgroup is not available in our app yet" })
+        
+        already = Profile.objects.filter(seller_account_id = seller_account_obj.id)
+        arr = []
+        for i in range(0,len(already)):
+            arr.append(already[i].work_group)
+        if (desired_workgroup in arr):
+            return Response({ "error" : "you already have a profile for this workgroup" })
+
+
         cnt = Profile.objects.filter(seller_account_id = seller_account_obj.id).count()
         seller_profile = Profile.objects.create(
                     profile_seller_id = cnt+1,
@@ -33,5 +47,5 @@ def seller_create_profile (request):
         now.update({'error': "no error found"})
         return Response (now)
     else:
-        return Response({ "error" : "no seller with this id" })
+        return Response({ "error" : "only a seller can make a profile" })
         

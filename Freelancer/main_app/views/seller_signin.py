@@ -2,6 +2,8 @@ from ..models import Seller_Account
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
+from .. import validators as v
+from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST'])
@@ -10,6 +12,11 @@ def seller_signin (request) :
     data = request.data
     if len(data['password']) == 0 or (len(data['username']) == 0 ) :
         return Response({ "error" : "some important values are not valid" })
+    if v.emailChecker(data['username'])== 1:
+            user = User.objects.get(email = data['username'])
+            if not user:
+                 return Response ({"error" : "no such user as a customer , please sign up first"})
+            data['username'] = user.username
     user = authenticate(username=data['username'], password=data['password'])
     
     seller_account =  Seller_Account.objects.filter(username = user)
@@ -21,7 +28,6 @@ def seller_signin (request) :
         
     seller_account = seller_account[0]
     now = seller_account.serialize()
-    now.update({ "id" : seller_account.username_id })
     now.update({ "error" : 'no error found'})
     now.update({'username': user.username})
     refresh = RefreshToken.for_user(user)

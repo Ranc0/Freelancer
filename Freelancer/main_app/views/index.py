@@ -66,6 +66,11 @@ def index (request) :
             "method" : "get",
             "description" : "as a sender seller, resume profile with this id, ((access)) token should be included in the request header"
         },
+        {
+            "endpoint" : "profiles/available",
+            "method" : "get",
+            "description" : "get the workgoups that you can make a profile in, ((access)) token should be included in the request header"
+        },
          {
             "endpoint" : "update/customer",
             "method" : 'put',
@@ -102,6 +107,11 @@ def index (request) :
             "endpoint" : "chats",
             "method" : "get",
             "description" : "explore chats linked with the sender, ((access)) token should be included in the request header"
+        },
+         {
+            "endpoint" : "chats/search/username",
+            "method" : "post",
+            "description" : "you recieve ((result)) containing chats with the matching prefix of this username, ((access)) token should be included in the request header"
         },
         {
             "endpoint" : "review/add/seller_account_username/profile_id",
