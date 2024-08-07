@@ -110,7 +110,7 @@ def index (request) :
         },
          {
             "endpoint" : "chats/search/username",
-            "method" : "post",
+            "method" : "GET",
             "description" : "you recieve ((result)) containing chats with the matching prefix of this username, ((access)) token should be included in the request header"
         },
         {
