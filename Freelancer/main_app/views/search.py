@@ -21,11 +21,13 @@ def search(request):
                 user = user[0]
                 account_query_set = account_query_set.filter(username = user )
             if i == "first_name":
-                b = True
-                account_query_set = account_query_set.filter(first_name__icontains = j)
+                if j != "":
+                    b = True
+                    account_query_set = account_query_set.filter(first_name__icontains = j)
             elif i == "second_name":
-                b = True
-                account_query_set = account_query_set.filter(second_name__icontains = j)
+                if j != "":
+                    b = True
+                    account_query_set = account_query_set.filter(second_name__icontains = j)
 
         if b == True:
             ids_array = account_query_set.only('id')
@@ -33,11 +35,14 @@ def search(request):
 
         for i,j in data.items():
             if i == "work_group":
-                info = info.filter(work_group__in = j)
+                if j != "":
+                    info = info.filter(work_group__in = j)
             elif i == "provided_services":
-                info = info.filter(provided_services__gte = j)
+                if j != -1:
+                    info = info.filter(provided_services__gte = j)
             elif i == "rate":
-                info = info.filter(rate__gte = j)
+                if j != -1:
+                    info = info.filter(rate__gte = j)
             elif i == "active":
                 info = info.filter(is_active = j)
         profiles = []
