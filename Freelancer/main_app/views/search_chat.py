@@ -32,4 +32,5 @@ def search_chat (request , username) :
             img = Customer_Account.objects.get(username =person2_username).img
            serialized_chat.update({ "img" : img })
            results.append(serialized_chat)
+    results = sorted(results, key=lambda x: x["time"], reverse=True)
     return Response ({'result' : results})
