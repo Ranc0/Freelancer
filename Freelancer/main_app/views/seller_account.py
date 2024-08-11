@@ -21,6 +21,7 @@ def seller_account (request):
                     "provided_services": pro.provided_services,
                     "member_since" : pro.member_since,
                     "rate" : pro.rate,
+                    "is_active": pro.is_active
                 })
             now = info.serialize()
             now.update({"img" : info.img})

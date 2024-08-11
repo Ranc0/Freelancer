@@ -22,4 +22,4 @@ def explore_reviews(request , seller_username , profile_id):
         customer_username = User.objects.get(username = i.person2_id)
         #obj.update ({"customer_username" : customer_username.username})
         reviews_serialized.append(obj)
-    return Response (reviews_serialized)
+    return Response ({"reviews" : reviews_serialized})
