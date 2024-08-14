@@ -33,7 +33,7 @@ class Seller_Account(models.Model):
             "id_picture": self.id_picture,
             "id_picture2": self.id_picture2,
             "img" : self.img,
-            "member_since": self.member_since,
+            
         }
     
 class Profile(models.Model):
@@ -55,8 +55,8 @@ class Profile(models.Model):
             "bio": self.bio,
             "provided_services": self.provided_services,
             "member_since": self.member_since,
-            "is_active" : self.is_active 
-            
+            "is_active" : self.is_active,
+            "member_since": self.member_since,
 
         }
     
