@@ -32,7 +32,8 @@ class Seller_Account(models.Model):
             "al_haram": self.al_haram,
             "id_picture": self.id_picture,
             "id_picture2": self.id_picture2,
-            "img" : self.img
+            "img" : self.img,
+            "member_since": self.member_since,
         }
     
 class Profile(models.Model):
